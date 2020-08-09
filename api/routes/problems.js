@@ -51,7 +51,8 @@ router.post('/', checkAuth, (req, res, next) => {
         name: req.body.name,
         link: req.body.link,
         notes: req.body.notes,
-        solution: req.body.solution
+        solution: req.body.solution,
+        user: req.userData.userId
     });
     console.log(problem);
     problem
