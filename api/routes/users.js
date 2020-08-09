@@ -6,6 +6,26 @@ const jwt = require('jsonwebtoken');
 
 const User =  require('../models/user');
 const { JsonWebTokenError } = require('jsonwebtoken');
+const user = require('../models/user');
+
+router.get('/:userEmail', (req, res, next) => {
+    const email = req.params.userEmail;
+    user.findOne({ email: email })
+        .select("email name todo finished")
+        .populate("todo finished")
+        .exec() 
+        .then(user => {
+            if (user) {
+                res.status(200).json({
+                    user: user
+                })
+            } else {
+                res.status(404).json({
+                    message: "User not found"
+                })
+            }
+        })
+})
 
 router.post('/signup', (req, res, next) => {
     User.find({ email: req.body.email })

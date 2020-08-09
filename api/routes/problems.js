@@ -7,7 +7,7 @@ const Problem = require('../models/problem');
 const User = require('../models/user');
 
 router.get('/', checkAuth, (req, res, next) => {
-    Problem.find()
+    Problem.find({ user: req.userData.userId })
         .select("_id name link notes solution")
         .exec()
         .then(docs => {
