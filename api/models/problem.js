@@ -5,7 +5,8 @@ const problemSchema = mongoose.Schema({
     name: { type: String, required: true },
     link: { type: String, required: true },
     notes: { type: String, required: false },
-    solution: { type: String, required: false }
+    solution: { type: String, required: false },
+    isComplete: { type: Boolean, required: false, default: false}
 });
 
 module.exports = mongoose.model('Problem', problemSchema);

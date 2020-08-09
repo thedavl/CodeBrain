@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const problemRoutes = require('./api/routes/problems');
+const userRoutes = require('./api/routes/users')
 
 mongoose.connect(
     'mongodb+srv://BigCodeBrainAdmin:' + 
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/problems', problemRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
