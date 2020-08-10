@@ -7,7 +7,7 @@ const AUTH_TOKEN_KEY = 'authToken'
 export function loginUser(email, password) {
     return new Promise(async (resolve, reject) => {
         try {
-            let res = await axios({
+            var res = await axios({
                 url: `${REST_ENDPOINT}/user/login`,
                 method: 'POST',
                 data: {
@@ -16,7 +16,8 @@ export function loginUser(email, password) {
                 }
             })
             setAuthToken(res.data.token);
-            localStorage.setItem('email', email);
+            await localStorage.setItem("userEmail", res.data.user[0].email);
+            await localStorage.setItem("userName", res.data.user[0].name);
             resolve()
         }
         catch (err) {
@@ -31,7 +32,6 @@ export function logoutUser() {
 }
 
 export function setAuthToken(token) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     localStorage.setItem(AUTH_TOKEN_KEY, token)
 }
 

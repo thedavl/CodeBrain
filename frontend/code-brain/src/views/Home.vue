@@ -3,25 +3,43 @@
     <div id="main-flex">
       <div id="left-stuff-container">
         <div id="queue">
-          Queue
-          <div v-for="item in todo" :key="item.name" class="single-card">
-            <p>{{ item.name }} <button :href="item.link">Link</button></p>
-            <p>{{ item.notes }}</p>
-            <p>{{ item.solution }}</p>
+          <p class="subtitle">Queue <button id="addProblem" class="btn btn-outline-dark" @click="addNewProblem">+</button></p>
+          <div class="scrollerBox">
+            <div v-for="item in todo" :key="item.name" class="single-card" :class="{ active : activeCard == item.name }" @click="showDetails(item.name, todo)">
+              <p>{{ item.name }}</p>
+            </div>
           </div>
         </div>
         <div id="finished">
-          Recently Finished
-          <div v-for="item in finished" :key="item.name" class="single-card">
+          <p class="subtitle">Recently Finished</p>
+          <div class="scrollerBox">
+            <div v-for="item in finished" :key="item.name" class="single-card">
               <p>{{ item.name }}</p>
-              <button :href="item.link">Link</button>
-              <p>{{ item.notes }}</p>
-              <p>{{ item.solution }}</p>
             </div>
+          </div>
         </div>
       </div>
       <div id="right-stuff-container">
-        <div id="detail-box">
+        <div id="detail-box" v-if="selected && !isEditing">
+          <br>
+          <p class="subtitle">{{ selected.name }}</p>
+          <a class="btn btn-outline-dark mid" id="white-dark-button" :href="selected.link" target="_blank">Problem Link</a>
+          <button class="btn btn-outline-dark right" id="white-dark-button" @click="startEditing">Edit</button>
+          <div id="notes">
+            <p class="detail-text">{{ selected.notes }}</p>
+          </div>
+          <div id="solution">
+            <p class="detail-text">{{ selected.solution }}</p>
+          </div>
+        </div>
+        <div id="detail-box" v-if="isEditing">
+          <br>
+          <input class="editBox" type="text" v-model="newName" :defaultValue="selected.name" /><br><br>
+          <input class="editBox" type="url" v-model="newLink" :defaultValue="selected.link" /><br><br>
+          <textarea rows="10" cols="52" v-model="newNotes" :defaultValue="selected.notes" /><br><br>
+          <textarea rows="10" cols="52" v-model="newSolution" :defaultValue="selected.solution" /><br>
+          <button class="btn btn-outline-dark" id="white-dark-button" @click="performEdits">Finish</button>
+          <button class="btn btn-outline-dark" id="white-dark-button" @click="cancelEdits">Cancel</button>
         </div>
       </div>
     </div>
@@ -37,38 +55,192 @@ export default {
     return {
       todo: [],
       finished: [],
-      selected: [],
+      selected: null,
+      isEditing: false,
+      activeCard: null,
+      newName: null,
+      newLink: null,
+      newNotes: null,
+      newSolution: null,
       REST_ENDPOINT: "http://localhost:8000"
     }
   },
   created() {
-    axios({
-      url: `${this.REST_ENDPOINT}/user/` + localStorage.getItem('email'),
-      method: 'GET',
-    })
-    .then(res => {
-      console.log(res);
-      this.todo = res.data.user.todo;
-      this.finished = res.data.user.finished;
-    })
+    this.getUserProblems();
+  },
+  methods: {
+    async getUserProblems() {
+      await axios({
+        url: `${this.REST_ENDPOINT}/user/` + localStorage.getItem('userEmail'),
+        method: 'GET',
+      })
+      .then(res => {
+        this.todo = res.data.user.todo;
+        this.finished = res.data.user.finished;
+      })
+    },
+    showDetails(name, arr) {
+      console.log(name, arr);
+      for (var item in arr) {
+        if (arr[item].name == name) {
+          this.selected = arr[item];
+          console.log("new selected", this.selected);
+          this.activeCard = name;
+          return;
+        }
+      }
+      console.log("not found uh oh")
+    },
+    addNewProblem() {
+      this.$router.push("/create");
+    },
+    startEditing() {
+      this.isEditing = true;
+      this.newName = this.selected.name;
+      this.newLink = this.selected.link;
+      this.newNotes = this.selected.notes;
+      this.newSolution = this.selected.solution;
+    },
+    async performEdits() {
+      var data = {
+        name: this.newName,
+        link: this.newLink,
+        notes: this.newNotes,
+        solution: this.newSolution
+      }
+      try {
+        await axios({
+          url: `${this.REST_ENDPOINT}/problems/` + this.selected._id,
+          method: 'PATCH',
+          data: data,
+          headers: {
+            'Authorization': "Bearer " + localStorage.getItem('authToken')
+          }
+        })
+
+        await this.getUserProblems();
+        console.log("nw", this.todo);
+        if (this.selected.isCompleted) {
+          this.showDetails(this.newName, this.finished);
+        } else {
+          this.showDetails(this.newName, this.todo);
+        }
+        this.isEditing = false;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    cancelEdits() {
+      this.isEditing = false;
+
+    }
   }
 }
 </script>
 
-<style scoped>
-.single-card {
+<style>
+.editBox {
+  width: 300px;
+}
+
+.right {
+  margin-left: 130px;
+}
+
+.mid {
+  margin-left: 170px;
+}
+
+#white-dark-button {
+  background: white;
+}
+#white-dark-button:hover {
+  background: #343a40;
+}
+
+#addProblem {
+  margin-left: 355px;
+}
+.active {
+  /* box-shadow: 3px 3px 5px #999; */
+  background-color: #A8FFFA;
+}
+
+.detail-text {
+  margin-top: 10px;
+}
+
+#notes {
   border: solid 1px black;
-  width: 400px;
+  width: 480px;
+  border-radius: 6px;
+  margin: 0 auto;
+  margin-top: 20px;
+  height: 28vh;
+  text-align: left;
+  padding-left: 20px;
+  background: white;
+}
+
+#solution {
+  border: solid 1px black;
+  width: 480px;
+  border-radius: 6px;
+  margin: 0 auto;
+  margin-top: 20px;
+  height: 28vh;
+  text-align: left;
+  padding-left: 20px;
+  background: white;
+}
+
+.subtitle {
+  font-size: 25px;
+}
+
+.single-card {
+  position: relative;
+  border: solid 1px black;
+  width: 450px;
+  height: 50px;
   margin: 0 auto;
   border-radius: 8px;
-  margin-bottom: 10px;
+  line-height: 20px;
+  margin-top: 10px;
+  padding-left: 5px;
+  /* new stuff */
+  overflow: hidden;
+  transition: 0.5s all ease;
+}
+
+.single-card::before {
+  background: #A8FFFA;
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  transition: all 0.6s ease;
+  width: 100%;
+  height: 0%;
+  transform: translate(-50%,-50%) rotate(-20deg);
+}
+
+.single-card:hover::before {
+  height: 400%;
+}
+
+.single-card p {
+  line-height: 47px;
+  font-size: 20px;
 }
 
 #detail-box {
   width: 600px;
-  height: 70vh;
+  height: 75vh;
   border: solid 1px black;
   border-radius: 8px;
+  background:#A8FFFA;
 }
 
 #main-flex {
@@ -81,25 +253,30 @@ export default {
 #left-stuff-container {
   width: 500px;
   margin-right: 40px;
-  margin-top: 10vh;
+  margin-top: 6vh;
 }
 
 #right-stuff-container {
   width: 500px;
   margin-left: 40px;
-  margin-top: 7vh;
+  margin-top: 3vh;
+}
+
+.scrollerBox {
+  height: 250px;
+  overflow-y: auto;
 }
 
 #queue {
-  border: solid 1px black;
   height: 30vh;
   width: 500px;
+  text-align: left;
 }
 
 #finished {
-  border: solid 1px black;
   height: 30vh;
   width: 500px;
   margin-top: 40px;
+  text-align: left;
 }
 </style>

@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Login from '../views/Login.vue';
+import CreateProblem from "../views/CreateProblem.vue"
 import { isLoggedIn } from '../utils/auth.js';
 
 
@@ -20,6 +21,11 @@ const routes = [
     meta: {
       allowAnonymous: true
     }
+  },
+  {
+    path: "/create",
+    name: "Create",
+    component: CreateProblem
   }
 ];
 
