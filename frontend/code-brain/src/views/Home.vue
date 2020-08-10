@@ -73,18 +73,31 @@ export default {
     this.getUserProblems();
   },
   methods: {
-    completeProblem() {
-
+    async completeProblem() {
+      await axios({
+        url: `${this.REST_ENDPOINT}/problems/` + this.selected._id,
+        method: 'PATCH',
+        data: {
+          isComplete: true
+        },
+        headers: {
+          'Authorization': "Bearer " + localStorage.getItem('authToken')
+        }
+      })
     },
     async getUserProblems() {
-      await axios({
-        url: `${this.REST_ENDPOINT}/user/` + localStorage.getItem('userEmail'),
-        method: 'GET',
-      })
-      .then(res => {
-        this.todo = res.data.user.todo;
-        this.finished = res.data.user.finished;
-      })
+      try {
+        await axios({
+          url: `${this.REST_ENDPOINT}/user/` + localStorage.getItem('userEmail'),
+          method: 'GET',
+        })
+        .then(res => {
+          this.todo = res.data.user.todo;
+          this.finished = res.data.user.finished;
+        })
+      } catch (err) {
+        console.log(err);
+      }
     },
     showDetails(name, arr) {
       console.log(name, arr);
@@ -139,7 +152,6 @@ export default {
     },
     cancelEdits() {
       this.isEditing = false;
-
     }
   }
 }
