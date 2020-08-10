@@ -13,6 +13,7 @@
             <textarea rows="10" cols="80" v-model="solution" /><br>
         </form>
         <button class="btn btn-outline-dark" @click="addNewProblem">Finish</button>
+        <button class="btn btn-outline-dark" @click="cancel">Cancel</button>
     </div>
 </template>
 <script>
@@ -35,7 +36,6 @@ export default {
                 name: this.name,
                 link: this.link
             }
-
             if (this.notes.length > 0) {
                 data['notes'] = this.notes;
             }
@@ -53,10 +53,14 @@ export default {
                 })
                 .then(res => {
                     console.log(res);
+                    this.$router.push("/");
                 })
             } catch (err) {
                 console.log(err);
             }
+        },
+        cancel() {
+            this.$router.push("/");
         }
     }
 }

@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="inputs">
+      <p id="login">Login</p>
       <label>Email</label>
       <input type="text" v-model="email" /><br>
       <label>Password</label>
@@ -37,10 +38,14 @@ export default {
 </script>
 
 <style>
+#login{
+  font-size: 25px;
+  margin-right: 125px;
+}
 .inputs {
   width: 320px;
   margin: 0 auto;
-  margin-top: 30vh;
+  margin-top: 26vh;
   text-align: right;
 }
 

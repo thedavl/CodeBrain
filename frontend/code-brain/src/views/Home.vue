@@ -8,6 +8,7 @@
             <div v-for="item in todo" :key="item.name" class="single-card" :class="{ active : activeCard == item.name }" @click="showDetails(item.name, todo)">
               <p>{{ item.name }}</p>
             </div>
+            <br>
           </div>
         </div>
         <div id="finished">
@@ -23,8 +24,11 @@
         <div id="detail-box" v-if="selected && !isEditing">
           <br>
           <p class="subtitle">{{ selected.name }}</p>
-          <a class="btn btn-outline-dark mid" id="white-dark-button" :href="selected.link" target="_blank">Problem Link</a>
-          <button class="btn btn-outline-dark right" id="white-dark-button" @click="startEditing">Edit</button>
+          <div class="button-flex">
+            <button class="btn btn-outline-dark" id="white-dark-button" @click="completeProblem">Finish</button>
+            <a class="btn btn-outline-dark" id="white-dark-button" :href="selected.link" target="_blank">Problem Link</a>
+            <button class="btn btn-outline-dark" id="white-dark-button" @click="startEditing">Edit</button>
+          </div>
           <div id="notes">
             <p class="detail-text">{{ selected.notes }}</p>
           </div>
@@ -69,6 +73,9 @@ export default {
     this.getUserProblems();
   },
   methods: {
+    completeProblem() {
+
+    },
     async getUserProblems() {
       await axios({
         url: `${this.REST_ENDPOINT}/user/` + localStorage.getItem('userEmail'),
@@ -139,16 +146,14 @@ export default {
 </script>
 
 <style>
+.button-flex {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 60px 0 60px;
+}
+
 .editBox {
   width: 300px;
-}
-
-.right {
-  margin-left: 130px;
-}
-
-.mid {
-  margin-left: 170px;
 }
 
 #white-dark-button {
@@ -180,6 +185,8 @@ export default {
   text-align: left;
   padding-left: 20px;
   background: white;
+  white-space: pre-wrap;
+  overflow-y: auto;
 }
 
 #solution {
@@ -192,6 +199,8 @@ export default {
   text-align: left;
   padding-left: 20px;
   background: white;
+  white-space: pre-wrap;
+  overflow-y: auto;
 }
 
 .subtitle {
@@ -211,6 +220,7 @@ export default {
   /* new stuff */
   overflow: hidden;
   transition: 0.5s all ease;
+  cursor: pointer;
 }
 
 .single-card::before {

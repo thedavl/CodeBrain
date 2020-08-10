@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="header">
-      <p id="logo">CodeBrain</p>
+      <a id="logo" @click="toHome">CodeBrain</a>
       <div v-if="isLogged">
         <p style="font-size: 20px; margin: 0 30px 0 0;">{{ getName }} <button id="logout" class="btn btn-outline-dark" @click="logout">Logout</button></p>
       </div>
@@ -17,6 +17,11 @@ export default {
     logout() {
       logoutUser();
       window.location.reload();
+    },
+    toHome() {
+      if (this.$route.name != "Home") {
+        this.$router.push('/')
+      }
     }
   },
   computed: {
@@ -74,6 +79,10 @@ export default {
 #logo {
   font-size: 35px;
   margin: 0 0 0 50px;
+}
+
+#logo:hover {
+  cursor: pointer;
 }
 
 #header {
