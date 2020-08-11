@@ -14,7 +14,7 @@
         <div id="finished">
           <p class="subtitle">Recently Finished</p>
           <div class="scrollerBox">
-            <div v-for="item in finished" :key="item.name" class="single-card">
+            <div v-for="item in finished" :key="item.name" class="single-card" :class="{ active : activeCard == item.name }" @click="showDetails(item.name, finished)">
               <p>{{ item.name }}</p>
             </div>
           </div>
@@ -25,7 +25,11 @@
           <br>
           <p class="subtitle">{{ selected.name }}</p>
           <div class="button-flex">
-            <button class="btn btn-outline-dark" id="white-dark-button" @click="completeProblem">Finish</button>
+            <div v-if="selected.isComplete" class="btn-spacer">
+            </div>
+            <div v-else>
+              <button class="btn btn-outline-dark" id="white-dark-button" @click="completeProblem">Finish</button>
+            </div>
             <a class="btn btn-outline-dark" id="white-dark-button" :href="selected.link" target="_blank">Problem Link</a>
             <button class="btn btn-outline-dark" id="white-dark-button" @click="startEditing">Edit</button>
           </div>
@@ -88,12 +92,30 @@ export default {
     async getUserProblems() {
       try {
         await axios({
-          url: `${this.REST_ENDPOINT}/user/` + localStorage.getItem('userEmail'),
+          url: `${this.REST_ENDPOINT}/problems/`,
           method: 'GET',
+          params: {
+            isComplete: false
+          },
+          headers: {
+            'Authorization': "Bearer " + localStorage.getItem('authToken')
+          }
         })
         .then(res => {
-          this.todo = res.data.user.todo;
-          this.finished = res.data.user.finished;
+          this.todo = res.data.problems;
+        })
+        await axios({
+          url: `${this.REST_ENDPOINT}/problems/`,
+          method: 'GET',
+          params: {
+            isComplete: true
+          },
+          headers: {
+            'Authorization': "Bearer " + localStorage.getItem('authToken')
+          }
+        })
+        .then(res => {
+          this.finished = res.data.problems;
         })
       } catch (err) {
         console.log(err);
@@ -158,6 +180,10 @@ export default {
 </script>
 
 <style>
+.btn-spacer {
+  width: 70px;
+}
+
 .button-flex {
   display: flex;
   justify-content: space-between;

@@ -10,11 +10,7 @@ const userSchema = mongoose.Schema({
     },
     name: { type: String, required: true },
     password: { type: String, required: true },
-    todo: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Problem'
-    }],
-    finished: [{
+    problems: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Problem'
     }]

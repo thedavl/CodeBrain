@@ -53,19 +53,19 @@ export default {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  border: solid 1px black;
+  background: #ededed;
   border-radius: 10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #898989; 
+  background: #c2c2c2; 
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #6F6F6F; 
+  background: #a3a3a3; 
 }
 
 #app {

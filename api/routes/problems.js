@@ -7,8 +7,15 @@ const Problem = require('../models/problem');
 const User = require('../models/user');
 
 router.get('/', checkAuth, (req, res, next) => {
-    Problem.find({ user: req.userData.userId })
-        .select("_id name link notes solution")
+    var params = {
+        user: req.userData.userId 
+    }
+    console.log("queries", req.query.isComplete);
+    if (req.query.isComplete) {
+        params['isComplete'] = req.query.isComplete
+    }
+    Problem.find(params)
+        .select("_id name link notes solution isComplete user")
         .exec()
         .then(docs => {
             const response = {
@@ -61,7 +68,7 @@ router.post('/', checkAuth, (req, res, next) => {
             console.log(result);
             User.findOne({ _id: req.userData.userId }, (err, user) => {
                 if (user) {
-                    user.todo.push(problem);
+                    user.problems.push(problem);
                     user.save();
                     res.status(201).json({
                         message: 'Problem saved successfully',

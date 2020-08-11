@@ -5,14 +5,30 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User =  require('../models/user');
-const { JsonWebTokenError } = require('jsonwebtoken');
-const user = require('../models/user');
+
+router.get('/', (req, res, next) => {
+    User.find()
+        .select("email name problems")
+        .populate("problems")
+        .exec() 
+        .then(users => {
+            if (users) {
+                res.status(200).json({
+                    users: users
+                })
+            } else {
+                res.status(500).json({
+                    message: "Error getting users"
+                })
+            }
+        })
+})
 
 router.get('/:userEmail', (req, res, next) => {
     const email = req.params.userEmail;
-    user.findOne({ email: email })
-        .select("email name todo finished")
-        .populate("todo finished")
+    User.findOne({ email: email })
+        .select("email name problems")
+        .populate("problems")
         .exec() 
         .then(user => {
             if (user) {

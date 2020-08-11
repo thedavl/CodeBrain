@@ -1,14 +1,16 @@
 <template>
   <div>
     <div class="inputs">
-      <p id="login">Login</p>
+      <p id="login-signup">Login</p>
       <label>Email</label>
       <input type="text" v-model="email" /><br>
       <label>Password</label>
       <input type="password" v-model="password" />
     </div>
-    <br>
-    <button class="btn btn-outline-dark" v-on:click="login">Login</button>
+    <div class="flex">
+      <button class="btn btn-outline-dark" v-on:click="login">Login</button>
+      <div class="signup-login-btn" @click="toSignup">Signup</div>
+    </div>
   </div>
 </template>
 
@@ -32,13 +34,33 @@ export default {
       } catch (err) {
         alert(`Error: ${err}`);
       }
+    },
+    toSignup() {
+      this.$router.push("/signup");
     }
   }
 };
 </script>
 
 <style>
-#login{
+.flex {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+.signup-login-btn {
+  text-decoration: none;
+  margin-top: 7px;
+  margin-left: 15px;
+  color: #b5b5b5;
+}
+.signup-login-btn:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: black;
+}
+
+#login-signup{
   font-size: 25px;
   margin-right: 125px;
 }

@@ -27,6 +27,28 @@ export function loginUser(email, password) {
     })
 }
 
+export function signupUser(email, password, name) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            var res = await axios({
+                url: `${REST_ENDPOINT}/user/signup`,
+                method: 'POST',
+                data: {
+                    email: email,
+                    password: password,
+                    name: name
+                }
+            })
+            console.log(res);
+            resolve()
+        }
+        catch (err) {
+            console.error('Caught an error during login:', err)
+            reject(err)
+        }
+    })
+}
+
 export function logoutUser() {
     clearAuthToken()
 }
