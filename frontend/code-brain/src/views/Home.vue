@@ -22,8 +22,8 @@
       </div>
       <div id="right-stuff-container">
         <div id="detail-box" v-if="selected && !isEditing">
+          <p id="detail-title" class="subtitle">{{ selected.name }}</p>
           <br>
-          <p class="subtitle">{{ selected.name }}</p>
           <div class="button-flex">
             <div v-if="selected.isComplete" class="btn-spacer">
             </div>
@@ -33,6 +33,7 @@
             <a class="btn btn-outline-dark" id="white-dark-button" :href="selected.link" target="_blank">Problem Link</a>
             <button class="btn btn-outline-dark" id="white-dark-button" @click="startEditing">Edit</button>
           </div>
+          <br>
           <div id="notes">
             <p class="detail-text">{{ selected.notes }}</p>
           </div>
@@ -41,11 +42,11 @@
           </div>
         </div>
         <div id="detail-box" v-if="isEditing">
-          <br>
-          <input class="editBox" type="text" v-model="newName" :defaultValue="selected.name" /><br><br>
-          <input class="editBox" type="url" v-model="newLink" :defaultValue="selected.link" /><br><br>
-          <textarea rows="10" cols="52" v-model="newNotes" :defaultValue="selected.notes" /><br><br>
-          <textarea rows="10" cols="52" v-model="newSolution" :defaultValue="selected.solution" /><br>
+          <br><br>
+          <input class="editBox" type="text" v-model="newName" :defaultValue="selected.name" /><br><br><br>
+          <input class="editBox" type="url" v-model="newLink" :defaultValue="selected.link" /><br><br><br>
+          <textarea rows="12" cols="106" v-model="newNotes" :defaultValue="selected.notes" /><br><br>
+          <textarea rows="15" cols="106" v-model="newSolution" :defaultValue="selected.solution" /><br>
           <button class="btn btn-outline-dark" id="white-dark-button" @click="performEdits">Finish</button>
           <button class="btn btn-outline-dark" id="white-dark-button" @click="cancelEdits">Cancel</button>
         </div>
@@ -88,6 +89,7 @@ export default {
           'Authorization': "Bearer " + localStorage.getItem('authToken')
         }
       })
+      window.location.reload();
     },
     async getUserProblems() {
       try {
@@ -180,6 +182,10 @@ export default {
 </script>
 
 <style>
+#detail-title {
+  margin-top: 30px;
+}
+
 .btn-spacer {
   width: 70px;
 }
@@ -187,7 +193,8 @@ export default {
 .button-flex {
   display: flex;
   justify-content: space-between;
-  margin: 0 60px 0 60px;
+  width: 50%;
+  margin: 0 auto;
 }
 
 .editBox {
@@ -202,7 +209,7 @@ export default {
 }
 
 #addProblem {
-  margin-left: 355px;
+  margin-left: 330px;
 }
 .active {
   /* box-shadow: 3px 3px 5px #999; */
@@ -215,25 +222,25 @@ export default {
 
 #notes {
   border: solid 1px black;
-  width: 480px;
+  width: 85%;
+  height: 32%;
   border-radius: 6px;
   margin: 0 auto;
   margin-top: 20px;
-  height: 28vh;
   text-align: left;
   padding-left: 20px;
   background: white;
-  white-space: pre-wrap;
-  overflow-y: auto;
+  white-space: normal;
+  /* overflow-y: auto; */
 }
 
 #solution {
   border: solid 1px black;
-  width: 480px;
+  width: 85%;
+  height: 45%;
   border-radius: 6px;
   margin: 0 auto;
   margin-top: 20px;
-  height: 28vh;
   text-align: left;
   padding-left: 20px;
   background: white;
@@ -284,10 +291,8 @@ export default {
 }
 
 #detail-box {
-  width: 600px;
-  height: 75vh;
-  border: solid 1px black;
-  border-radius: 8px;
+  width: 100%;
+  height: 96.9%;
   background:#A8FFFA;
 }
 
@@ -296,18 +301,17 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
   width: 100vw;
+  margin-top: -85px;
 }
 
 #left-stuff-container {
-  width: 500px;
-  margin-right: 40px;
-  margin-top: 6vh;
+  width: 50vw;
 }
 
 #right-stuff-container {
-  width: 500px;
-  margin-left: 40px;
-  margin-top: 3vh;
+  background: #A8FFFA;
+  width: 50vw;
+  height: 100vh;
 }
 
 .scrollerBox {
@@ -317,14 +321,17 @@ export default {
 
 #queue {
   height: 30vh;
-  width: 500px;
+  width: 450px;
   text-align: left;
+  margin: 0 auto;
+  margin-top: 185px;
 }
 
 #finished {
   height: 30vh;
-  width: 500px;
+  width: 450px;
   margin-top: 40px;
   text-align: left;
+  margin: 0 auto;
 }
 </style>

@@ -87,6 +87,7 @@ export default {
 
 #header {
   margin-top: 30px;
+  width: 50vw;
   display: flex;
   justify-content: space-between;
 }
