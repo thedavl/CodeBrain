@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <div id="header">
+    <div id="header" class="flex">
       <a id="logo" @click="toHome">CodeBrain</a>
-      <div v-if="isLogged">
+      <div v-if="isLogged" id="loggedInMsg">
         <p style="font-size: 20px; margin: 0 30px 0 0;">{{ getName }} <button id="logout" class="btn btn-outline-dark" @click="logout">Logout</button></p>
       </div>
     </div>
@@ -43,8 +43,20 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
+#loggedInMsg {
+  width: 300px;
+  margin-left: 10px;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
 #logout {
   margin-left: 20px;
+  display: inline;
 }
 
 ::-webkit-scrollbar {
