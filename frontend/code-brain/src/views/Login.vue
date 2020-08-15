@@ -3,7 +3,7 @@
     <div class="inputs">
       <p id="login-signup">Login</p>
       <label>Email</label>
-      <input type="text" v-model="email" /><br>
+      <input type="text" v-model="email" /><br />
       <label>Password</label>
       <input type="password" v-model="password" />
     </div>
@@ -60,7 +60,7 @@ export default {
   color: black;
 }
 
-#login-signup{
+#login-signup {
   font-size: 25px;
   margin-right: 125px;
 }
@@ -71,7 +71,7 @@ export default {
   text-align: right;
 }
 
-.inputs label  {
+.inputs label {
   margin-right: 10px;
 }
 

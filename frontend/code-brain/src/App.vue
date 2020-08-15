@@ -1,110 +1,56 @@
 <template>
-  <div id="app">
-    <div id="header" class="flex">
-      <a id="logo" @click="toHome">CodeBrain</a>
-      <div v-if="isLogged" id="loggedInMsg">
-        <p style="font-size: 20px; margin: 0 30px 0 0;">{{ getName }} <button id="logout" class="btn btn-outline-dark" @click="logout">Logout</button></p>
+  <v-app>
+    <v-app-bar app color="primary" dark>
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          transition="scale-transition"
+          width="40"
+        />
+
+        <v-img
+          alt="Vuetify Name"
+          class="shrink mt-1 hidden-sm-and-down"
+          contain
+          min-width="100"
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
+          width="100"
+        />
       </div>
-    </div>
-    <router-view />
-  </div>
+
+      <v-spacer></v-spacer>
+
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Latest Release</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <HelloWorld />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import { isLoggedIn, logoutUser } from './utils/auth'
+import HelloWorld from "./components/HelloWorld";
+
 export default {
-  methods: {
-    logout() {
-      logoutUser();
-      window.location.reload();
-    },
-    toHome() {
-      if (this.$route.name != "Home") {
-        this.$router.push('/')
-      }
-    }
+  name: "App",
+
+  components: {
+    HelloWorld
   },
-  computed: {
-    isLogged() {
-      return isLoggedIn();
-    },
-    getName() {
-      var name = localStorage.getItem("userName");
-      if (name) {
-        return "Welcome " + name;
-      } else {
-        return "err"
-      }
-    }
-  }
-}
+
+  data: () => ({
+    //
+  })
+};
 </script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-
-#loggedInMsg {
-  width: 300px;
-  margin-left: 10px;
-}
-
-.flex {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-#logout {
-  margin-left: 20px;
-  display: inline;
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #ededed;
-  border-radius: 10px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #c2c2c2; 
-  border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #a3a3a3; 
-}
-
-#app {
-  font-family: 'Open Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#logo {
-  font-size: 35px;
-  margin: 0 0 0 50px;
-}
-
-#logo:hover {
-  cursor: pointer;
-}
-
-#header {
-  margin-top: 30px;
-  width: 50vw;
-  display: flex;
-  justify-content: space-between;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>

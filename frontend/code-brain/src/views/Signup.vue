@@ -3,9 +3,9 @@
     <div class="inputs">
       <p id="login-signup">Signup</p>
       <label>Email</label>
-      <input type="text" v-model="email" /><br>
+      <input type="text" v-model="email" /><br />
       <label>Name</label>
-      <input type="text" v-model="name" /><br>
+      <input type="text" v-model="name" /><br />
       <label>Password</label>
       <input type="password" v-model="password" />
     </div>
@@ -20,31 +20,29 @@
 import { signupUser } from "../utils/auth";
 
 export default {
-    name: "Signup",
-    data() {
-      return {
-        email: "",
-        name: "",
-        password: ""
-      }
+  name: "Signup",
+  data() {
+    return {
+      email: "",
+      name: "",
+      password: ""
+    };
+  },
+  methods: {
+    toLogin() {
+      this.$router.push("/login");
     },
-    methods: {
-      toLogin() {
-        this.$router.push("/login");
-      },
-      async signup() {
-        try {
-          await signupUser(this.email, this.password, this.name);
-          this.$router.push("/");
-          window.location.reload();
-        } catch (err) {
-          alert(`Error: ${err}`);
-        }
+    async signup() {
+      try {
+        await signupUser(this.email, this.password, this.name);
+        this.$router.push("/");
+        window.location.reload();
+      } catch (err) {
+        alert(`Error: ${err}`);
       }
     }
-}
+  }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

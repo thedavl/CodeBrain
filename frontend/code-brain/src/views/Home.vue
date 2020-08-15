@@ -3,18 +3,39 @@
     <div id="main-flex">
       <div id="left-stuff-container">
         <div id="queue">
-          <p class="subtitle">Queue <button id="addProblem" class="btn btn-outline-dark" @click="addNewProblem">+</button></p>
+          <p class="subtitle">
+            Queue
+            <button
+              id="addProblem"
+              class="btn btn-outline-dark"
+              @click="addNewProblem"
+            >
+              +
+            </button>
+          </p>
           <div class="scrollerBox">
-            <div v-for="item in todo" :key="item.name" class="single-card" :class="{ active : activeCard == item.name }" @click="showDetails(item.name, todo)">
+            <div
+              v-for="item in todo"
+              :key="item.name"
+              class="single-card"
+              :class="{ active: activeCard == item.name }"
+              @click="showDetails(item.name, todo)"
+            >
               <p>{{ item.name }}</p>
             </div>
-            <br>
+            <br />
           </div>
         </div>
         <div id="finished">
           <p class="subtitle">Recently Finished</p>
           <div class="scrollerBox">
-            <div v-for="item in finished" :key="item.name" class="single-card" :class="{ active : activeCard == item.name }" @click="showDetails(item.name, finished)">
+            <div
+              v-for="item in finished"
+              :key="item.name"
+              class="single-card"
+              :class="{ active: activeCard == item.name }"
+              @click="showDetails(item.name, finished)"
+            >
               <p>{{ item.name }}</p>
             </div>
           </div>
@@ -23,17 +44,34 @@
       <div id="right-stuff-container">
         <div id="detail-box" v-if="selected && !isEditing">
           <p id="detail-title" class="subtitle">{{ selected.name }}</p>
-          <br>
+          <br />
           <div class="button-flex">
-            <div v-if="selected.isComplete" class="btn-spacer">
-            </div>
+            <div v-if="selected.isComplete" class="btn-spacer"></div>
             <div v-else>
-              <button class="btn btn-outline-dark" id="white-dark-button" @click="completeProblem">Finish</button>
+              <button
+                class="btn btn-outline-dark"
+                id="white-dark-button"
+                @click="completeProblem"
+              >
+                Finish
+              </button>
             </div>
-            <a class="btn btn-outline-dark" id="white-dark-button" :href="selected.link" target="_blank">Problem Link</a>
-            <button class="btn btn-outline-dark" id="white-dark-button" @click="startEditing">Edit</button>
+            <a
+              class="btn btn-outline-dark"
+              id="white-dark-button"
+              :href="selected.link"
+              target="_blank"
+              >Problem Link</a
+            >
+            <button
+              class="btn btn-outline-dark"
+              id="white-dark-button"
+              @click="startEditing"
+            >
+              Edit
+            </button>
           </div>
-          <br>
+          <br />
           <div id="notes">
             <p class="detail-text">{{ selected.notes }}</p>
           </div>
@@ -42,13 +80,47 @@
           </div>
         </div>
         <div id="detail-box" v-if="isEditing">
-          <br><br>
-          <input class="editBox" type="text" v-model="newName" :defaultValue="selected.name" /><br><br><br>
-          <input class="editBox" type="url" v-model="newLink" :defaultValue="selected.link" /><br><br><br>
-          <textarea v-on:keydown.tab="textHandleTab('editNotes')" rows="12" cols="106" v-model="newNotes" :defaultValue="selected.notes" /><br><br>
-          <textarea v-on:keydown.tab="textHandleTab('editSolution')" rows="15" cols="106" v-model="newSolution" :defaultValue="selected.solution" /><br>
-          <button class="btn btn-outline-dark" id="white-dark-button" @click="performEdits">Finish</button>
-          <button class="btn btn-outline-dark" id="white-dark-button" @click="cancelEdits">Cancel</button>
+          <br /><br />
+          <input
+            class="editBox"
+            type="text"
+            v-model="newName"
+            :defaultValue="selected.name"
+          /><br /><br /><br />
+          <input
+            class="editBox"
+            type="url"
+            v-model="newLink"
+            :defaultValue="selected.link"
+          /><br /><br /><br />
+          <v-text-field
+            v-on:keydown.tab="textHandleTab('editNotes')"
+            rows="12"
+            cols="106"
+            v-model="newNotes"
+            :defaultValue="selected.notes"
+          /><br /><br />
+          <v-text-field
+            v-on:keydown.tab="textHandleTab('editSolution')"
+            rows="15"
+            cols="106"
+            v-model="newSolution"
+            :defaultValue="selected.solution"
+          /><br />
+          <button
+            class="btn btn-outline-dark"
+            id="white-dark-button"
+            @click="performEdits"
+          >
+            Finish
+          </button>
+          <button
+            class="btn btn-outline-dark"
+            id="white-dark-button"
+            @click="cancelEdits"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
@@ -56,7 +128,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   name: "Home",
@@ -72,68 +144,67 @@ export default {
       newNotes: null,
       newSolution: null,
       REST_ENDPOINT: "http://localhost:8000"
-    }
+    };
   },
   created() {
     this.getUserProblems();
   },
   methods: {
     textHandleTab(areaToEdit) {
-      if (event.code==="Tab") {
+      if (event.code === "Tab") {
         event.preventDefault();
         var areas = document.getElementsByTagName("textarea");
         var area;
-        if (areaToEdit == 'editNotes') {
+        if (areaToEdit == "editNotes") {
           area = areas[0];
-        } else if (areaToEdit == 'editSolution') {
+        } else if (areaToEdit == "editSolution") {
           area = areas[1];
         }
         let { value, selectionStart, selectionEnd } = area;
-        area.value = value.slice(0, selectionStart) + "\t" + value.slice(selectionEnd);
-        area.setSelectionRange(selectionStart+1, selectionStart+1);
+        area.value =
+          value.slice(0, selectionStart) + "\t" + value.slice(selectionEnd);
+        area.setSelectionRange(selectionStart + 1, selectionStart + 1);
       }
     },
     async completeProblem() {
       await axios({
         url: `${this.REST_ENDPOINT}/problems/` + this.selected._id,
-        method: 'PATCH',
+        method: "PATCH",
         data: {
           isComplete: true
         },
         headers: {
-          'Authorization': "Bearer " + localStorage.getItem('authToken')
+          Authorization: "Bearer " + localStorage.getItem("authToken")
         }
-      })
+      });
       window.location.reload();
     },
     async getUserProblems() {
       try {
         await axios({
           url: `${this.REST_ENDPOINT}/problems/`,
-          method: 'GET',
+          method: "GET",
           params: {
             isComplete: false
           },
           headers: {
-            'Authorization': "Bearer " + localStorage.getItem('authToken')
+            Authorization: "Bearer " + localStorage.getItem("authToken")
           }
-        })
-        .then(res => {
+        }).then(res => {
           this.todo = res.data.problems;
-        })
+        });
         await axios({
           url: `${this.REST_ENDPOINT}/problems/`,
-          method: 'GET',
+          method: "GET",
           params: {
             isComplete: true
           },
           headers: {
-            'Authorization': "Bearer " + localStorage.getItem('authToken')
+            Authorization: "Bearer " + localStorage.getItem("authToken")
           }
-        })
-        .then(res => {
+        }).then(res => {
           this.finished = res.data.problems;
-        })
+        });
       } catch (err) {
         console.log(err);
       }
@@ -148,7 +219,7 @@ export default {
           return;
         }
       }
-      console.log("not found uh oh")
+      console.log("not found uh oh");
     },
     addNewProblem() {
       this.$router.push("/create");
@@ -166,16 +237,16 @@ export default {
         link: this.newLink,
         notes: this.newNotes,
         solution: this.newSolution
-      }
+      };
       try {
         await axios({
           url: `${this.REST_ENDPOINT}/problems/` + this.selected._id,
-          method: 'PATCH',
+          method: "PATCH",
           data: data,
           headers: {
-            'Authorization': "Bearer " + localStorage.getItem('authToken')
+            Authorization: "Bearer " + localStorage.getItem("authToken")
           }
-        })
+        });
 
         await this.getUserProblems();
         console.log("nw", this.todo);
@@ -193,11 +264,10 @@ export default {
       this.isEditing = false;
     }
   }
-}
+};
 </script>
 
 <style>
-
 #detail-title {
   margin-top: 30px;
 }
@@ -229,7 +299,7 @@ export default {
 }
 .active {
   /* box-shadow: 3px 3px 5px #999; */
-  background-color: #A8FFFA;
+  background-color: #a8fffa;
 }
 
 .detail-text {
@@ -289,7 +359,7 @@ export default {
 }
 
 .single-card::before {
-  background: #A8FFFA;
+  background: #a8fffa;
   content: "";
   position: absolute;
   top: 50%;
@@ -298,7 +368,7 @@ export default {
   transition: all 0.6s ease;
   width: 100%;
   height: 0%;
-  transform: translate(-50%,-50%) rotate(-20deg);
+  transform: translate(-50%, -50%) rotate(-20deg);
 }
 
 .single-card:hover::before {
@@ -313,7 +383,7 @@ export default {
 #detail-box {
   width: 100%;
   height: 96.9%;
-  background:#A8FFFA;
+  background: #a8fffa;
 }
 
 #main-flex {
@@ -331,7 +401,7 @@ export default {
 }
 
 #right-stuff-container {
-  background: #A8FFFA;
+  background: #a8fffa;
   width: 50vw;
   min-width: 400px;
   height: 100vh;
