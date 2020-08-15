@@ -80,13 +80,45 @@
           </div>
         </div>
         <div id="detail-box" v-if="isEditing">
-          <br><br>
-          <input class="editBox" type="text" v-model="newName" :defaultValue="selected.name" /><br><br><br>
-          <input class="editBox" type="url" v-model="newLink" :defaultValue="selected.link" /><br><br><br>
-          <textarea rows="12" cols="106" v-model="newNotes" :defaultValue="selected.notes" /><br><br>
-          <textarea rows="15" cols="106" v-model="newSolution" :defaultValue="selected.solution" /><br>
-          <button class="btn btn-outline-dark" id="white-dark-button" @click="performEdits">Finish</button>
-          <button class="btn btn-outline-dark" id="white-dark-button" @click="cancelEdits">Cancel</button>
+          <br /><br />
+          <input
+            class="editBox"
+            type="text"
+            v-model="newName"
+            :defaultValue="selected.name"
+          /><br /><br /><br />
+          <input
+            class="editBox"
+            type="url"
+            v-model="newLink"
+            :defaultValue="selected.link"
+          /><br /><br /><br />
+          <textarea
+            rows="12"
+            cols="106"
+            v-model="newNotes"
+            :defaultValue="selected.notes"
+          /><br /><br />
+          <textarea
+            rows="15"
+            cols="106"
+            v-model="newSolution"
+            :defaultValue="selected.solution"
+          /><br />
+          <button
+            class="btn btn-outline-dark"
+            id="white-dark-button"
+            @click="performEdits"
+          >
+            Finish
+          </button>
+          <button
+            class="btn btn-outline-dark"
+            id="white-dark-button"
+            @click="cancelEdits"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
@@ -95,7 +127,6 @@
 
 <script>
 import axios from "axios";
-
 export default {
   name: "Home",
   data() {
@@ -197,7 +228,6 @@ export default {
             Authorization: "Bearer " + localStorage.getItem("authToken")
           }
         });
-
         await this.getUserProblems();
         console.log("nw", this.todo);
         if (this.selected.isCompleted) {
@@ -221,44 +251,40 @@ export default {
 #detail-title {
   margin-top: 30px;
 }
-
 .btn-spacer {
   width: 70px;
 }
-
 .button-flex {
   display: flex;
   justify-content: space-between;
   width: 50%;
   margin: 0 auto;
 }
-
 .editBox {
   width: 300px;
 }
-
 #white-dark-button {
   background: white;
 }
 #white-dark-button:hover {
   background: #343a40;
 }
-
 #addProblem {
-  margin-left: 330px;
+  margin-left: 265px;
 }
 .active {
   /* box-shadow: 3px 3px 5px #999; */
   background-color: #a8fffa;
 }
-
 .detail-text {
   margin-top: 10px;
+  width: 100%;
+  word-break: break-all;
 }
-
 #notes {
   border: solid 1px black;
-  width: 85%;
+  width: 43vw;
+  min-width: 340px;
   height: 32%;
   border-radius: 6px;
   margin: 0 auto;
@@ -266,13 +292,13 @@ export default {
   text-align: left;
   padding-left: 20px;
   background: white;
-  white-space: normal;
-  /* overflow-y: auto; */
+  white-space: pre-wrap;
+  overflow-y: auto;
 }
-
 #solution {
   border: solid 1px black;
-  width: 85%;
+  width: 43vw;
+  min-width: 340px;
   height: 45%;
   border-radius: 6px;
   margin: 0 auto;
@@ -283,27 +309,24 @@ export default {
   white-space: pre-wrap;
   overflow-y: auto;
 }
-
 .subtitle {
   font-size: 25px;
 }
-
 .single-card {
   position: relative;
   border: solid 1px black;
-  width: 450px;
+  width: 380px;
   height: 50px;
   margin: 0 auto;
   border-radius: 8px;
   line-height: 20px;
   margin-top: 10px;
-  padding-left: 5px;
+  padding-left: 10px;
   /* new stuff */
   overflow: hidden;
   transition: 0.5s all ease;
   cursor: pointer;
 }
-
 .single-card::before {
   background: #a8fffa;
   content: "";
@@ -316,22 +339,18 @@ export default {
   height: 0%;
   transform: translate(-50%, -50%) rotate(-20deg);
 }
-
 .single-card:hover::before {
   height: 400%;
 }
-
 .single-card p {
   line-height: 47px;
-  font-size: 20px;
+  font-size: 18px;
 }
-
 #detail-box {
   width: 100%;
   height: 96.9%;
   background: #a8fffa;
 }
-
 #main-flex {
   display: flex;
   justify-content: center;
@@ -339,34 +358,32 @@ export default {
   width: 100vw;
   margin-top: -85px;
 }
-
 #left-stuff-container {
   width: 50vw;
+  min-width: 400px;
+  margin-top: 100px;
 }
-
 #right-stuff-container {
   background: #a8fffa;
   width: 50vw;
+  min-width: 400px;
   height: 100vh;
 }
-
 .scrollerBox {
   height: 250px;
   overflow-y: auto;
 }
-
 #queue {
   height: 30vh;
-  width: 450px;
+  width: 400px;
   text-align: left;
   margin: 0 auto;
-  margin-top: 185px;
+  margin-top: 85px;
+  margin-bottom: 80px;
 }
-
 #finished {
   height: 30vh;
-  width: 450px;
-  margin-top: 40px;
+  width: 400px;
   text-align: left;
   margin: 0 auto;
 }

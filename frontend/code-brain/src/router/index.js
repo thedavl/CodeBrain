@@ -1,10 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Login from "../views/Login.vue";
-import Signup from "../views/Signup.vue";
-import CreateProblem from "../views/CreateProblem.vue";
-import { isLoggedIn } from "../utils/auth.js";
+import Login from '../views/Login.vue';
+import Signup from '../views/Signup.vue'
+import CreateProblem from "../views/CreateProblem.vue"
+import { isLoggedIn } from '../utils/auth.js';
+
 
 Vue.use(VueRouter);
 
