@@ -80,47 +80,13 @@
           </div>
         </div>
         <div id="detail-box" v-if="isEditing">
-          <br /><br />
-          <input
-            class="editBox"
-            type="text"
-            v-model="newName"
-            :defaultValue="selected.name"
-          /><br /><br /><br />
-          <input
-            class="editBox"
-            type="url"
-            v-model="newLink"
-            :defaultValue="selected.link"
-          /><br /><br /><br />
-          <v-text-field
-            v-on:keydown.tab="textHandleTab('editNotes')"
-            rows="12"
-            cols="106"
-            v-model="newNotes"
-            :defaultValue="selected.notes"
-          /><br /><br />
-          <v-text-field
-            v-on:keydown.tab="textHandleTab('editSolution')"
-            rows="15"
-            cols="106"
-            v-model="newSolution"
-            :defaultValue="selected.solution"
-          /><br />
-          <button
-            class="btn btn-outline-dark"
-            id="white-dark-button"
-            @click="performEdits"
-          >
-            Finish
-          </button>
-          <button
-            class="btn btn-outline-dark"
-            id="white-dark-button"
-            @click="cancelEdits"
-          >
-            Cancel
-          </button>
+          <br><br>
+          <input class="editBox" type="text" v-model="newName" :defaultValue="selected.name" /><br><br><br>
+          <input class="editBox" type="url" v-model="newLink" :defaultValue="selected.link" /><br><br><br>
+          <textarea rows="12" cols="106" v-model="newNotes" :defaultValue="selected.notes" /><br><br>
+          <textarea rows="15" cols="106" v-model="newSolution" :defaultValue="selected.solution" /><br>
+          <button class="btn btn-outline-dark" id="white-dark-button" @click="performEdits">Finish</button>
+          <button class="btn btn-outline-dark" id="white-dark-button" @click="cancelEdits">Cancel</button>
         </div>
       </div>
     </div>
@@ -150,22 +116,6 @@ export default {
     this.getUserProblems();
   },
   methods: {
-    textHandleTab(areaToEdit) {
-      if (event.code === "Tab") {
-        event.preventDefault();
-        var areas = document.getElementsByTagName("textarea");
-        var area;
-        if (areaToEdit == "editNotes") {
-          area = areas[0];
-        } else if (areaToEdit == "editSolution") {
-          area = areas[1];
-        }
-        let { value, selectionStart, selectionEnd } = area;
-        area.value =
-          value.slice(0, selectionStart) + "\t" + value.slice(selectionEnd);
-        area.setSelectionRange(selectionStart + 1, selectionStart + 1);
-      }
-    },
     async completeProblem() {
       await axios({
         url: `${this.REST_ENDPOINT}/problems/` + this.selected._id,
@@ -295,7 +245,7 @@ export default {
 }
 
 #addProblem {
-  margin-left: 265px;
+  margin-left: 330px;
 }
 .active {
   /* box-shadow: 3px 3px 5px #999; */
@@ -304,14 +254,11 @@ export default {
 
 .detail-text {
   margin-top: 10px;
-  width: 100%;
-  word-break: break-all;
 }
 
 #notes {
   border: solid 1px black;
-  width: 43vw;
-  min-width: 340px;
+  width: 85%;
   height: 32%;
   border-radius: 6px;
   margin: 0 auto;
@@ -319,14 +266,13 @@ export default {
   text-align: left;
   padding-left: 20px;
   background: white;
-  white-space: pre-wrap;
-  overflow-y: auto;
+  white-space: normal;
+  /* overflow-y: auto; */
 }
 
 #solution {
   border: solid 1px black;
-  width: 43vw;
-  min-width: 340px;
+  width: 85%;
   height: 45%;
   border-radius: 6px;
   margin: 0 auto;
@@ -345,13 +291,13 @@ export default {
 .single-card {
   position: relative;
   border: solid 1px black;
-  width: 380px;
+  width: 450px;
   height: 50px;
   margin: 0 auto;
   border-radius: 8px;
   line-height: 20px;
   margin-top: 10px;
-  padding-left: 10px;
+  padding-left: 5px;
   /* new stuff */
   overflow: hidden;
   transition: 0.5s all ease;
@@ -377,7 +323,7 @@ export default {
 
 .single-card p {
   line-height: 47px;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 #detail-box {
@@ -396,14 +342,11 @@ export default {
 
 #left-stuff-container {
   width: 50vw;
-  min-width: 400px;
-  margin-top: 100px;
 }
 
 #right-stuff-container {
   background: #a8fffa;
   width: 50vw;
-  min-width: 400px;
   height: 100vh;
 }
 
@@ -414,16 +357,16 @@ export default {
 
 #queue {
   height: 30vh;
-  width: 400px;
+  width: 450px;
   text-align: left;
   margin: 0 auto;
-  margin-top: 85px;
-  margin-bottom: 80px;
+  margin-top: 185px;
 }
 
 #finished {
   height: 30vh;
-  width: 400px;
+  width: 450px;
+  margin-top: 40px;
   text-align: left;
   margin: 0 auto;
 }
