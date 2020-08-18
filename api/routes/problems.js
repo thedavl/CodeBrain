@@ -10,12 +10,18 @@ router.get('/', checkAuth, (req, res, next) => {
     var params = {
         user: req.userData.userId 
     }
-    console.log("queries", req.query.isComplete);
     if (req.query.isComplete) {
         params['isComplete'] = req.query.isComplete
     }
+    var whatToSortBy;
+    if (req.query.isComplete && req.query.isComplete == 'true') {
+        whatToSortBy = '-finishedAt';
+    } else {
+        whatToSortBy = '-priorityDate';
+    }
     Problem.find(params)
-        .select("_id name link notes solution isComplete user")
+        .select("_id name link notes solution isComplete user priorityDate finishedAt")
+        .sort(whatToSortBy)
         .exec()
         .then(docs => {
             const response = {
@@ -88,7 +94,39 @@ router.post('/', checkAuth, (req, res, next) => {
 
 router.patch("/:problemId", checkAuth, (req, res, next) => {
     const id = req.params.problemId;
-    Problem.update({ _id: id }, { $set: req.body })
+    Problem.updateOne({ _id: id }, { $set: req.body })
+        .exec()
+        .then(result => {
+            console.log(result);
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+})
+
+router.post("/:problemId/bump", checkAuth, (req, res, next) => {
+    const id = req.params.problemId;
+    Problem.updateOne({ _id: id }, { priorityDate:  Date.now() })
+        .exec()
+        .then(result => {
+            console.log(result);
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+})
+
+router.post("/:problemId/finish", checkAuth, (req, res, next) => {
+    const id = req.params.problemId;
+    const updateBody = {
+        isComplete: true,
+        finishedAt: Date.now()
+    }
+    Problem.updateOne({ _id: id }, { $set: updateBody })
         .exec()
         .then(result => {
             console.log(result);

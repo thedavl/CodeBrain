@@ -7,7 +7,9 @@ const problemSchema = mongoose.Schema({
     notes: { type: String, required: false },
     solution: { type: String, required: false },
     isComplete: { type: Boolean, required: false, default: false},
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    priorityDate: { type : Date, default: Date.now },
+    finishedAt: { type : Date }
 });
 
 module.exports = mongoose.model('Problem', problemSchema);

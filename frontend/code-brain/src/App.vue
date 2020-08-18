@@ -56,12 +56,7 @@ export default {
   display: inline;
 }
 ::-webkit-scrollbar {
-  width: 10px;
-}
-/* Track */
-::-webkit-scrollbar-track {
-  background: #ededed;
-  border-radius: 10px;
+  width: 8px;
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {
@@ -88,7 +83,6 @@ export default {
 }
 #header {
   margin-top: 30px;
-  width: 50vw;
   display: flex;
   justify-content: space-between;
 }
