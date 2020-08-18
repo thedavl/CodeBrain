@@ -37,7 +37,7 @@
                 </div>
                 <br>
                 <div v-if="selectedItem.isComplete">
-                    <p>Completed on: {{ getFormattedDate(selectedItem.finishedAt) }}</p>
+                    <p>Completed on <strong>{{ getFormattedDate(selectedItem.finishedAt) }}</strong></p>
                 </div>
                 <div class="notes">
                     <p class="detail-text" v-if="selectedItem.hasOwnProperty('notes')">{{ selectedItem.notes }}</p>
@@ -129,9 +129,9 @@ export default {
         getFormattedDate(unformattedDate) {
             // var split;
             var formatted = new Date(unformattedDate)
-            var dateOnly = formatted.toDateString();
+            var dateOnly = formatted.toDateString().split(" ");
             var timeOnly = formatted.toTimeString().split(":");
-            return dateOnly + " @ " + timeOnly[0] + ":" + timeOnly[1];
+            return dateOnly[1] + " " + dateOnly[2] + ", " + dateOnly[3] + " @ " + timeOnly[0] + ":" + timeOnly[1];
         },
         async bump() {
             await axios({
@@ -217,9 +217,12 @@ export default {
 }
 .button-flex {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 50%;
   margin: 0 auto;
+}
+.button-flex .btn {
+    margin: 0 8px 0 8px;
 }
 .notes {
   width: 43vw;
