@@ -5,7 +5,7 @@
       <label>Email</label>
       <input class="login-input" type="text" v-model="email" /><br />
       <label>Password</label>
-      <input class="login-input" type="password" v-model="password" />
+      <input class="login-input" type="password" v-model="password" @keyup.enter="login"/>
     </div>
     <div class="flex">
       <button class="btn btn-outline-dark" v-on:click="login">Login</button>
@@ -32,7 +32,7 @@ export default {
         this.$router.push("/");
         window.location.reload();
       } catch (err) {
-        alert(`Error: ${err}`);
+        alert("Login Failed");
       }
     },
     toSignup() {

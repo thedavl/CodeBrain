@@ -37,8 +37,8 @@
                 </div>
                 <br>
                 <div class="button-flex">
-                    <div class="tag-bubble spacer" :id="'tag-bubble-' + selectedItem.mainTag">{{ selectedItem.mainTag }}</div>
-                    <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :id="'tag-bubble-' + tag" class="tag-bubble spacer">{{ tag }}</div>
+                    <div class="tag-bubble spacer" :class="'tag-bubble-' + selectedItem.mainTag">{{ selectedItem.mainTag }}</div>
+                    <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :class="'tag-bubble-' + tag" class="tag-bubble spacer">{{ tag }}</div>
                 </div>
                 <div v-if="selectedItem.isComplete">
                     <p>Completed on <strong>{{ getFormattedDate(selectedItem.finishedAt) }}</strong></p>
@@ -87,10 +87,19 @@
             </div>
             <br>
             <div class="button-flex">
-                <div class="tag-bubble tag-bubble-delete spacer" :id="'tag-bubble-' + selectedItem.mainTag" @click="changeMainTag()">{{ selectedItem.mainTag }}</div>
-                <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :id="'tag-bubble-' + tag" class="tag-bubble tag-bubble-delete spacer" @click="addTagToDelete(tag)">{{ tag }}</div>
-                <div class="tag-bubble tag-bubble-add" :id="'tag-bubble-add'" @click="addNewOtherTag()" v-if="!addingNewTag">+</div>
-                <input class="tag-bubble tag-bubble-add" :id="'tag-bubble-add'" v-else />
+                <div class="tag-bubble tag-bubble-delete spacer" :class="'tag-bubble-' + selectedItem.mainTag" @click="changeMainTag()">{{ selectedItem.mainTag }}</div>
+                <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :class="'tag-bubble-' + tag" class="tag-bubble tag-bubble-delete spacer" @click="queueTagToDelete(tag)">{{ tag }}</div>
+                <div class="tag-bubble tag-bubble-add" :id="'tag-bu bble-add'">
+                    <div class="tag-bubble-add-flex">
+                        <span>
+                            <select class="tag-bubble-add-input" v-model="tagToAdd">
+                                <option disabled value="">Select a Tag</option>
+                                <option v-for="(tag, index) in allTagOptions" :key="index">{{ tag }}</option>
+                            </select> 
+                        </span>
+                        <div class="tag-bubble-add-confirm" @click="queueTagToAdd()"></div>
+                    </div>
+                </div>
             </div>
             <div v-if="selectedItem.isComplete">
                 <p>Completed on <strong>{{ getFormattedDate(selectedItem.finishedAt) }}</strong></p>
@@ -127,7 +136,23 @@ export default {
             newSolution: null,
             REST_ENDPOINT: "http://localhost:8000",
             tagsToDelete: [],
-            addingNewTag: false
+            tagsToAdd: [],
+            tagToAdd: "",
+            addingNewTag: false,
+            allTagOptions: [
+                "Array",
+                "String",
+                "Dynamic-Programming",
+                "Tree",
+                "Math",
+                "Linked-List",
+                "BFS",
+                "DFS",
+                "Matrix",
+                "Recursion",
+                "Sliding-Window",
+                "Hash-Table"
+            ]
         }
     },
     props: {
@@ -137,11 +162,20 @@ export default {
         console.log(this.selectedItem.solution);
     },
     methods: {
-        addNewOtherTag() {
-            this.addingNewTag = true;
+        queueTagToAdd() {
+            this.selectedItem.otherTags.push(this.tagToAdd);
+            this.tagsToAdd.push(this.tagToAdd);
+            this.tagToAdd = "";
         },
-        addTagToDelete(tag) {
-            this.tagsToDelete.push(tag);
+        queueTagToDelete(tag) {
+            if (this.tagsToAdd.includes(tag)) {
+                this.tagsToAdd.forEach(tag => {
+                    this.selectedItem.otherTags.splice(this.selectedItem.otherTags.indexOf(tag), 1);
+                })
+            } else {
+                this.selectedItem.otherTags.splice(this.selectedItem.otherTags.indexOf(tag), 1);
+                this.tagsToDelete.push(tag);
+            }
         },
         async deleteOtherTags() {
             await axios({
@@ -149,6 +183,18 @@ export default {
                 method: "DELETE",
                 data: {
                     otherTags: this.tagsToDelete
+                },
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("authToken")
+                }
+            });
+        },
+        async addOtherTags() {
+            await axios({
+                url: `${this.REST_ENDPOINT}/problems/` + this.selectedItem._id + '/addOtherTag',
+                method: "POST",
+                data: {
+                    otherTags: this.tagsToAdd
                 },
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("authToken")
@@ -205,6 +251,7 @@ export default {
                     }
                 });
                 await this.deleteOtherTags();
+                await this.addOtherTags();
                 this.tagsToDelete = [];
                 this.$emit("updatedProblemElement");
                 this.isEditing = false;
@@ -214,6 +261,12 @@ export default {
         },
         cancelEdits() {
             this.tagsToDelete = [];
+            this.tagsToAdd.forEach(tag => {
+                this.selectedItem.otherTags.splice(this.selectedItem.otherTags.indexOf(tag), 1);
+            })
+            this.tagsToDelete.forEach(tag => {
+                this.selectedItem.otherTags.push(tag);
+            })
             this.addingNewTag = false;
             this.isEditing = false;
         }
@@ -222,12 +275,50 @@ export default {
 </script>
 
 <style scoped>
+.tag-bubble-add-flex {
+    display: flex;
+}
+.tag-bubble-add-confirm {
+    color: black;
+}
+.tag-bubble-add-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+}
 .tag-bubble-add {
+    min-width: 20px;
     margin: 0 0 0 5px;
-    background-color: rgb(0, 255, 21);
+    border: 1px solid black;
     color: rgb(255, 255, 255);
     cursor: pointer;
     transition: 0.5s all ease;
+}
+.tag-bubble-add span {
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    max-width: 0;
+    -webkit-transition: max-width 1s;
+    transition: max-width 1s;
+}
+.tag-bubble-add-confirm {
+    transition: 0.2s all ease;
+}
+.tag-bubble-add-confirm:hover {
+    font-size: 25px;
+}
+.tag-bubble-add:hover span, .tag-bubble-add span:focus {
+    max-width: 200px;
+}
+.tag-bubble-add-confirm:after {
+    content:'+';
+    font-size: 18px;
+}
+.tag-bubble-add:hover .tag-bubble-add-confirm:after {
+    content:'✓';
+    margin-left: 5px;
 }
 .tag-bubble-delete {
     cursor: pointer;
@@ -283,7 +374,7 @@ export default {
   margin: 0 auto;
   margin-top: 20px;
   text-align: left;
-  padding-left: 20px;
+  padding: 0 20px 0 20px;
   white-space: pre-wrap;
   word-break: break-all;
   color: black;
@@ -298,7 +389,7 @@ export default {
   margin: 0 auto;
   margin-top: 20px;
   text-align: left;
-  padding-left: 20px;
+  padding: 0 20px 0 20px;
   white-space: pre-wrap;
   word-break: break-all;
   color: black;

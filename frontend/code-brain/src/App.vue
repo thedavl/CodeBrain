@@ -43,64 +43,74 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 
-#tag-bubble-Array {
+.tag-bubble {
+  height: 29px;
+  line-height: 29px;
+  border-radius: 15px;
+  padding: 0 14px 0 14px;
+  margin-top: 7px;
+  border: none;
+  outline: none;
+}
+
+.tag-bubble-Array {
   background-color: #00c721;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-String {
+.tag-bubble-String {
   background-color: #0068f0;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-Dynamic-Programming {
+.tag-bubble-Dynamic-Programming {
   background-color: #f00084;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-Tree {
+.tag-bubble-Tree {
   background-color: #b000f0;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-Math {
+.tag-bubble-Math {
   background-color: #2cfc9b;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-Linked-Lists {
+.tag-bubble-Linked-List {
   background-color: #2cf5fc;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-BFS {
+.tag-bubble-BFS {
   background-color: #6a2cfc;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-DFS {
+.tag-bubble-DFS {
   background-color: #fc9b2c;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-Matrix {
+.tag-bubble-Matrix {
   background-color: #e42cfc;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-Recursion {
+.tag-bubble-Recursion {
   background-color: #ff41aa;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-Sliding-Window {
+.tag-bubble-Sliding-Window {
   background-color: #1900ff;
-  color: white !important;
+  color: white;
 }
 
-#tag-bubble-Sliding-Hash-Table {
+.tag-bubble-Hash-Table {
   background-color: #8f0000;
-  color: white !important;
+  color: white;
 }
 
 #loggedInMsg {

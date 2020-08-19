@@ -25,7 +25,7 @@
                 <p class="single-card-title">{{ item.name }}</p>
                 <p class="single-card-overflow-indicator" v-if="item.name.length >= 28">...</p>
               </div>
-              <div class="tag-bubble" :id="'tag-bubble-' + item.mainTag">{{ item.mainTag }}</div>
+              <div class="tag-bubble" :class="'tag-bubble-' + item.mainTag">{{ item.mainTag }}</div>
             </div>
             <br />
           </div>
@@ -151,16 +151,7 @@ export default {
 };
 </script>
 
-<style>
-.tag-bubble {
-  height: 28px;
-  line-height: 28px;
-  border-radius: 15px;
-  padding: 0 10px 0 10px;
-  margin-top: 7.5px;
-  border: none;
-  outline: none;
-}
+<style scoped>
 .single-card-title {
   /* max-width: calc(30em * 0.5); */
   max-width: calc(27em * 0.5);

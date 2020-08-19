@@ -131,8 +131,8 @@ router.delete('/:problemId/deleteOtherTag', checkAuth, (req, res, next) => {
                     if (problem.otherTags.includes(item)) {
                         problem.otherTags.splice(problem.otherTags.indexOf(item), 1);
                     }
-                    problem.save();
                 });
+                problem.save();
                 res.status(201).json({
                     message: "tag deleted successfully",
                     updatedProblem: problem

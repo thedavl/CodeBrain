@@ -21,8 +21,8 @@ export function loginUser(email, password) {
             resolve()
         }
         catch (err) {
-            console.error('Caught an error during login:', err)
-            reject(err)
+            console.error('Login Failed')
+            reject('Login Failed')
         }
     })
 }
