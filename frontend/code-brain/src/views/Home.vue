@@ -19,9 +19,13 @@
               :key="item.name"
               class="single-card"
               :class="{ active: activeCard == item.name }"
-              @click="showDetails(item.name, todo)"
+              @click="showDetails(item._id, todo)"
             >
-              <p>{{ item.name }}</p>
+              <div class="single-card-title-and-overflow">
+                <p class="single-card-title">{{ item.name }}</p>
+                <p class="single-card-overflow-indicator" v-if="item.name.length >= 28">...</p>
+              </div>
+              <div class="tag-bubble" :id="'tag-bubble-' + item.mainTag">{{ item.mainTag }}</div>
             </div>
             <br />
           </div>
@@ -34,16 +38,23 @@
               :key="item.name"
               class="single-card"
               :class="{ active: activeCard == item.name }"
-              @click="showDetails(item.name, finished)"
+              @click="showDetails(item._id, finished)"
             >
-              <p class="single-card-title">{{ item.name }}</p>
+              <div class="single-card-title-and-overflow">
+                <p class="single-card-title">{{ item.name }}</p>
+                <p class="single-card-overflow-indicator" v-if="item.name.length > 28">...</p>
+              </div>
               <p>{{ getFormattedDate(item.finishedAt) }}</p>
             </div>
           </div>
         </div>
       </div>
       <transition name="fade">
-        <DetailBoxComponent v-if="selected != null" :selectedItem="selected" />
+        <DetailBoxComponent 
+          v-if="selected != null"
+          :selectedItem="selected" 
+          @updatedProblemElement="updateProblemElements"
+        />
       </transition>
       <div v-if="activeCard == null" id="spacer" />
     </div>
@@ -73,11 +84,21 @@ export default {
     this.getUserProblems();
   },
   methods: {
+    async updateProblemElements() {
+      await this.getUserProblems();
+      if (this.selected.isCompleted) {
+        this.showDetails(this.selected._id, this.finished);
+      } else {
+        console.log("todo", this.todo)
+        this.showDetails(this.selected._id, this.todo);
+      }
+    },
     getFormattedDate(unformattedDate) {
-      var split = unformattedDate.split(":");
-      var onlyDate = split[0].split("T")[0].split("-");
-      // formattedDate = date[0];
-      return onlyDate[1] + "/" + onlyDate[2];
+        // var split;
+        var date = new Date(unformattedDate);
+        var minutes = date.getMinutes();
+        if (minutes < 10) minutes *= 10;
+        return date.getMonth() + 1 + "/" + date.getDay() + " " + date.getHours() + ":" + minutes;
     },
     async getUserProblems() {
       try {
@@ -109,14 +130,13 @@ export default {
         console.log(err);
       }
     },
-    showDetails(name, arr) {
-      console.log(name, arr);
+    showDetails(id, arr) {
       for (var item in arr) {
-        if (arr[item].name == name) {
+        if (arr[item]._id == id) {
           this.selected = null;
           setTimeout(() => {
             this.selected = arr[item];
-            this.activeCard = name;
+            this.activeCard = this.selected.name;
           }, 200);
           console.log("new selected", this.selected);
           return;
@@ -132,9 +152,20 @@ export default {
 </script>
 
 <style>
-.single-card-title {
-
+.tag-bubble {
+  height: 28px;
+  line-height: 28px;
+  border-radius: 15px;
+  padding: 0 10px 0 10px;
+  margin-top: 7.5px;
+  border: none;
+  outline: none;
 }
+.single-card-title {
+  /* max-width: calc(30em * 0.5); */
+  max-width: calc(27em * 0.5);
+  word-break: break-all
+} 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
@@ -162,9 +193,14 @@ export default {
   /* new stuff */
   overflow: hidden;
   transition: 0.5s all ease;
-  cursor: pointer;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
+}
+.single-card-title-and-overflow {
+  height: 45px;
+  display: flex;
+  justify-content: left;
 }
 .single-card p {
   line-height: 45px;
@@ -183,7 +219,7 @@ export default {
 #left-stuff-container {
   width: 50vw;
   min-width: 400px;
-  border-right: 1px solid rgb(206, 206, 206)
+  border-right: 1px solid #cecece
 }
 #queue {
   height: 30vh;

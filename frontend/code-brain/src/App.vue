@@ -42,6 +42,67 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+#tag-bubble-Array {
+  background-color: #00c721;
+  color: white !important;
+}
+
+#tag-bubble-String {
+  background-color: #0068f0;
+  color: white !important;
+}
+
+#tag-bubble-Dynamic-Programming {
+  background-color: #f00084;
+  color: white !important;
+}
+
+#tag-bubble-Tree {
+  background-color: #b000f0;
+  color: white !important;
+}
+
+#tag-bubble-Math {
+  background-color: #2cfc9b;
+  color: white !important;
+}
+
+#tag-bubble-Linked-Lists {
+  background-color: #2cf5fc;
+  color: white !important;
+}
+
+#tag-bubble-BFS {
+  background-color: #6a2cfc;
+  color: white !important;
+}
+
+#tag-bubble-DFS {
+  background-color: #fc9b2c;
+  color: white !important;
+}
+
+#tag-bubble-Matrix {
+  background-color: #e42cfc;
+  color: white !important;
+}
+
+#tag-bubble-Recursion {
+  background-color: #ff41aa;
+  color: white !important;
+}
+
+#tag-bubble-Sliding-Window {
+  background-color: #1900ff;
+  color: white !important;
+}
+
+#tag-bubble-Sliding-Hash-Table {
+  background-color: #8f0000;
+  color: white !important;
+}
+
 #loggedInMsg {
   width: 300px;
   margin-left: 10px;

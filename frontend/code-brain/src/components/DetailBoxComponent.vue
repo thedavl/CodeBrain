@@ -36,6 +36,10 @@
                     </button>
                 </div>
                 <br>
+                <div class="button-flex">
+                    <div class="tag-bubble spacer" :id="'tag-bubble-' + selectedItem.mainTag">{{ selectedItem.mainTag }}</div>
+                    <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :id="'tag-bubble-' + tag" class="tag-bubble spacer">{{ tag }}</div>
+                </div>
                 <div v-if="selectedItem.isComplete">
                     <p>Completed on <strong>{{ getFormattedDate(selectedItem.finishedAt) }}</strong></p>
                 </div>
@@ -49,57 +53,62 @@
                 </div>
         </div>
         <div class="detail-box" v-else>
-            <input
-                class="editBox"
-                id="edit-title"
-                type="text"
-                v-model="newName"
-                :defaultValue="selectedItem.name"
+            <div class="edit-box-top">
+                <input
+                    class="editBox"
+                    id="edit-title"
+                    type="text"
+                    v-model="newName"
+                    :defaultValue="selectedItem.name"
+                    />
+                <input
+                    class="editBox"
+                    type="url"
+                    v-model="newLink"
+                    :defaultValue="selectedItem.link"
                 />
-            <br /><br />
-            <input
-                class="editBox"
-                type="url"
-                v-model="newLink"
-                :defaultValue="selectedItem.link"
-            />
-            <br /><br />
-            <div class="button-flex">
-                <div class="btn-spacer" />
-                <button
-                class="btn btn-outline-dark"
-                id="white-dark-button"
-                @click="performEdits"
-                >
-                    Finish
-                </button>
-                <button
+                <br />
+                <div class="button-flex">
+                    <button
                     class="btn btn-outline-dark"
                     id="white-dark-button"
-                    @click="cancelEdits"
-                >
-                    Cancel
-                </button>
-                <div class="btn-spacer" />
+                    @click="performEdits"
+                    >
+                        Finish
+                    </button>
+                    <button
+                        class="btn btn-outline-dark"
+                        id="white-dark-button"
+                        @click="cancelEdits"
+                    >
+                        Cancel
+                    </button>
+                </div>
             </div>
-            <div class="notes">
-                <textarea
-                    rows="12"
-                    cols="106"
-                    class="detail-text"
-                    v-model="newNotes"
-                    :defaultValue="selectedItem.notes"
-                />
+            <br>
+            <div class="button-flex">
+                <div class="tag-bubble tag-bubble-delete spacer" :id="'tag-bubble-' + selectedItem.mainTag" @click="changeMainTag()">{{ selectedItem.mainTag }}</div>
+                <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :id="'tag-bubble-' + tag" class="tag-bubble tag-bubble-delete spacer" @click="addTagToDelete(tag)">{{ tag }}</div>
+                <div class="tag-bubble tag-bubble-add" :id="'tag-bubble-add'" @click="addNewOtherTag()" v-if="!addingNewTag">+</div>
+                <input class="tag-bubble tag-bubble-add" :id="'tag-bubble-add'" v-else />
             </div>
-            <div class="solution">
-                <textarea
-                    rows="15"
-                    cols="106"
-                    class="detail-text"
-                    v-model="newSolution"
-                    :defaultValue="selectedItem.solution"
-                />
+            <div v-if="selectedItem.isComplete">
+                <p>Completed on <strong>{{ getFormattedDate(selectedItem.finishedAt) }}</strong></p>
             </div>
+            <textarea
+                rows="12"
+                cols="106"
+                class="notes"
+                v-model="newNotes"
+                :defaultValue="selectedItem.notes"
+            />
+            <textarea
+                rows="15"
+                cols="106"
+                class="solution"
+                v-model="newSolution"
+                :defaultValue="selectedItem.solution"
+            />
         </div>
     </div>
 </template>
@@ -116,7 +125,9 @@ export default {
             newLink: null,
             newNotes: null,
             newSolution: null,
-            REST_ENDPOINT: "http://localhost:8000"
+            REST_ENDPOINT: "http://localhost:8000",
+            tagsToDelete: [],
+            addingNewTag: false
         }
     },
     props: {
@@ -126,9 +137,26 @@ export default {
         console.log(this.selectedItem.solution);
     },
     methods: {
+        addNewOtherTag() {
+            this.addingNewTag = true;
+        },
+        addTagToDelete(tag) {
+            this.tagsToDelete.push(tag);
+        },
+        async deleteOtherTags() {
+            await axios({
+                url: `${this.REST_ENDPOINT}/problems/` + this.selectedItem._id + '/deleteOtherTag',
+                method: "DELETE",
+                data: {
+                    otherTags: this.tagsToDelete
+                },
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("authToken")
+                }
+            });
+        },
         getFormattedDate(unformattedDate) {
-            // var split;
-            var formatted = new Date(unformattedDate)
+            var formatted = new Date(unformattedDate);
             var dateOnly = formatted.toDateString().split(" ");
             var timeOnly = formatted.toTimeString().split(":");
             return dateOnly[1] + " " + dateOnly[2] + ", " + dateOnly[3] + " @ " + timeOnly[0] + ":" + timeOnly[1];
@@ -169,26 +197,24 @@ export default {
             };
             try {
                 await axios({
-                url: `${this.REST_ENDPOINT}/problems/` + this.selectedItem._id,
-                method: "PATCH",
-                data: data,
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("authToken")
-                }
+                    url: `${this.REST_ENDPOINT}/problems/` + this.selectedItem._id,
+                    method: "PATCH",
+                    data: data,
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("authToken")
+                    }
                 });
-                await this.getUserProblems();
-                console.log("nw", this.todo);
-                if (this.selectedItem.isCompleted) {
-                this.showDetails(this.newName, this.finished);
-                } else {
-                this.showDetails(this.newName, this.todo);
-                }
+                await this.deleteOtherTags();
+                this.tagsToDelete = [];
+                this.$emit("updatedProblemElement");
                 this.isEditing = false;
             } catch (err) {
                 console.log(err);
             }
         },
         cancelEdits() {
+            this.tagsToDelete = [];
+            this.addingNewTag = false;
             this.isEditing = false;
         }
     }
@@ -196,6 +222,30 @@ export default {
 </script>
 
 <style scoped>
+.tag-bubble-add {
+    margin: 0 0 0 5px;
+    background-color: rgb(0, 255, 21);
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    transition: 0.5s all ease;
+}
+.tag-bubble-delete {
+    cursor: pointer;
+    transition: 0.5s all ease;
+}
+.tag-bubble-delete:hover {
+    box-shadow: 0 0 6px #8d8d8d;
+}
+.tag-bubble-add:hover{
+    box-shadow: 0 0 6px #8d8d8d;
+    border: none;
+}
+.spacer {
+    margin: 0 5px 0 5px;
+}
+.edit-box-top {
+    height: 91px;
+}
 #right-stuff-container {
   width: 50vw;
   min-width: 400px;
@@ -218,8 +268,9 @@ export default {
 .button-flex {
   display: flex;
   justify-content: center;
-  width: 50%;
   margin: 0 auto;
+  flex-wrap: wrap;
+  width: 80%;
 }
 .button-flex .btn {
     margin: 0 8px 0 8px;
@@ -237,7 +288,7 @@ export default {
   word-break: break-all;
   color: black;
   overflow-y: auto;
-  border: 1px solid black;
+  border: 1px solid #cecece;
 }
 .solution {
   width: 43vw;
@@ -252,7 +303,7 @@ export default {
   word-break: break-all;
   color: black;
   overflow-y: auto;
-  border: 1px solid black;
+  border: 1px solid #cecece;
 }
 .notes textarea, .solution textarea {
   margin-top: 8.5px;
@@ -271,7 +322,7 @@ export default {
   background: #343a40;
 }
 #edit-title {
-  margin-top: 30.5px;
+    margin: 10px 6px 13px 0;
 }
 .detail-text {
   margin-top: 10px;

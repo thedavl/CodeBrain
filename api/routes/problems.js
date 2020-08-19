@@ -20,7 +20,7 @@ router.get('/', checkAuth, (req, res, next) => {
         whatToSortBy = '-priorityDate';
     }
     Problem.find(params)
-        .select("_id name link notes solution isComplete user priorityDate finishedAt")
+        .select("_id name link notes solution isComplete user priorityDate finishedAt mainTag otherTags")
         .sort(whatToSortBy)
         .exec()
         .then(docs => {
@@ -65,9 +65,12 @@ router.post('/', checkAuth, (req, res, next) => {
         link: req.body.link,
         notes: req.body.notes,
         solution: req.body.solution,
-        user: req.userData.userId
+        user: req.userData.userId,
+        mainTag: req.body.mainTag,
     });
-    console.log(problem);
+    if (req.body.otherTags) {
+        problem['otherTags'] = req.body.otherTags;
+    }
     problem
         .save()
         .then(result => {
@@ -85,6 +88,58 @@ router.post('/', checkAuth, (req, res, next) => {
                     res.status(500).json({ error: err });
                 }
             })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        });
+})
+
+router.post('/:problemId/addOtherTag', checkAuth, (req, res, next) => {
+    const id = req.params.problemId;
+    Problem.findById(id)
+        .exec()
+        .then(problem => {
+            if (problem) {
+                req.body.otherTags.forEach(item => {
+                    if (!problem.otherTags.includes(item)) {
+                        problem.otherTags.push(item);
+                    }
+                });
+                problem.save();
+                res.status(201).json({
+                    message: "other tags added successfully",
+                    updatedProblem: problem
+                })
+            } else {
+                res.status(404).json({ message: "problem not found" })
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        })
+})
+
+router.delete('/:problemId/deleteOtherTag', checkAuth, (req, res, next) => {
+    const id = req.params.problemId;
+    Problem.findById(id)
+        .exec()
+        .then(problem => {
+            if (problem) {
+                req.body.otherTags.forEach(item => {
+                    if (problem.otherTags.includes(item)) {
+                        problem.otherTags.splice(problem.otherTags.indexOf(item), 1);
+                    }
+                    problem.save();
+                });
+                res.status(201).json({
+                    message: "tag deleted successfully",
+                    updatedProblem: problem
+                });
+            } else {
+                res.status(404).json({ message: "tag not found" })
+            }
         })
         .catch(err => {
             console.log(err);
