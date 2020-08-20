@@ -20,7 +20,7 @@ router.get('/', checkAuth, (req, res, next) => {
         whatToSortBy = '-priorityDate';
     }
     Problem.find(params)
-        .select("_id name link notes solution isComplete user priorityDate finishedAt mainTag otherTags")
+        .select("_id name link notes solution isComplete user priorityDate finishedAt mainTag otherTags difficulty")
         .sort(whatToSortBy)
         .exec()
         .then(docs => {
@@ -67,6 +67,7 @@ router.post('/', checkAuth, (req, res, next) => {
         solution: req.body.solution,
         user: req.userData.userId,
         mainTag: req.body.mainTag,
+        difficulty: req.body.difficulty
     });
     if (req.body.otherTags) {
         problem['otherTags'] = req.body.otherTags;

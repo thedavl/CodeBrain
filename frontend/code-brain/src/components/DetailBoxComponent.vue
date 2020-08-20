@@ -1,7 +1,10 @@
 <template>
     <div id="right-stuff-container">
-        <div class="detail-box" v-if="!isEditing" >
-            <p id="detail-title" class="subtitle">{{ selectedItem.name }}</p>
+        <div class="detail-box" v-if="!isEditing">
+            <div class="flex" id="detail-title-flex">
+                <div class="tag-bubble" :class="'tag-bubble-' + selectedItem.difficulty">{{ formatDifficulty(selectedItem.difficulty) }}</div>
+                <p id="detail-title" class="subtitle">{{ selectedItem.name }}</p>
+            </div>
                 <div class="button-flex">
                     <a
                         class="btn btn-outline-dark"
@@ -54,6 +57,11 @@
         </div>
         <div class="detail-box" v-else>
             <div class="edit-box-top">
+                <select class="tag-bubble difficulty-bubble-add" :class="'difficulty-bubble-' + this.newDifficulty" id="difficulty-selector" v-model="newDifficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
                 <input
                     class="editBox"
                     id="edit-title"
@@ -68,28 +76,28 @@
                     :defaultValue="selectedItem.link"
                 />
                 <br />
-                <div class="button-flex">
-                    <button
+            </div>
+            <div class="button-flex">
+                <button
+                class="btn btn-outline-dark"
+                id="white-dark-button"
+                @click="performEdits"
+                >
+                    Finish
+                </button>
+                <button
                     class="btn btn-outline-dark"
                     id="white-dark-button"
-                    @click="performEdits"
-                    >
-                        Finish
-                    </button>
-                    <button
-                        class="btn btn-outline-dark"
-                        id="white-dark-button"
-                        @click="cancelEdits"
-                    >
-                        Cancel
-                    </button>
-                </div>
+                    @click="cancelEdits"
+                >
+                    Cancel
+                </button>
             </div>
             <br>
             <div class="button-flex">
                 <div class="tag-bubble tag-bubble-delete spacer" :class="'tag-bubble-' + selectedItem.mainTag" @click="changeMainTag()">{{ selectedItem.mainTag }}</div>
                 <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :class="'tag-bubble-' + tag" class="tag-bubble tag-bubble-delete spacer" @click="queueTagToDelete(tag)">{{ tag }}</div>
-                <div class="tag-bubble tag-bubble-add" :id="'tag-bu bble-add'">
+                <div class="tag-bubble tag-bubble-add" :id="'tag-bubble-add'">
                     <div class="tag-bubble-add-flex">
                         <span>
                             <select class="tag-bubble-add-input" v-model="tagToAdd">
@@ -134,6 +142,7 @@ export default {
             newLink: null,
             newNotes: null,
             newSolution: null,
+            newDifficulty: this.selectedItem.difficulty,
             REST_ENDPOINT: "http://localhost:8000",
             tagsToDelete: [],
             tagsToAdd: [],
@@ -152,7 +161,7 @@ export default {
                 "Recursion",
                 "Sliding-Window",
                 "Hash-Table"
-            ]
+            ],
         }
     },
     props: {
@@ -162,6 +171,9 @@ export default {
         console.log(this.selectedItem.solution);
     },
     methods: {
+        formatDifficulty(d) {
+            return d.substring(0, 1).toUpperCase() + d.substring(1, d.length);
+        },
         queueTagToAdd() {
             this.selectedItem.otherTags.push(this.tagToAdd);
             this.tagsToAdd.push(this.tagToAdd);
@@ -169,9 +181,8 @@ export default {
         },
         queueTagToDelete(tag) {
             if (this.tagsToAdd.includes(tag)) {
-                this.tagsToAdd.forEach(tag => {
-                    this.selectedItem.otherTags.splice(this.selectedItem.otherTags.indexOf(tag), 1);
-                })
+                this.selectedItem.otherTags.splice(this.selectedItem.otherTags.indexOf(tag), 1);
+                this.tagsToAdd.splice(this.tagsToAdd.indexOf(tag), 1);
             } else {
                 this.selectedItem.otherTags.splice(this.selectedItem.otherTags.indexOf(tag), 1);
                 this.tagsToDelete.push(tag);
@@ -239,7 +250,8 @@ export default {
                 name: this.newName,
                 link: this.newLink,
                 notes: this.newNotes,
-                solution: this.newSolution
+                solution: this.newSolution,
+                difficulty: this.newDifficulty
             };
             try {
                 await axios({
@@ -268,6 +280,8 @@ export default {
                 this.selectedItem.otherTags.push(tag);
             })
             this.addingNewTag = false;
+            this.newDifficulty = this.selectedItem.difficulty;
+            this.isEditingDifficulty = false;
             this.isEditing = false;
         }
     }
@@ -275,6 +289,22 @@ export default {
 </script>
 
 <style scoped>
+#difficulty-selector {
+    color: white;
+}
+.difficulty-bubble-add:hover {
+    background-color: white;
+    border: 1px solid black !important;
+    color: black !important;
+}
+#detail-title-flex {
+    margin-bottom: 18px;
+}
+.difficulty-bubble-add {
+    width: 120px;
+    cursor: pointer;
+    transition: 0.5s;
+}
 .tag-bubble-add-flex {
     display: flex;
 }
@@ -291,7 +321,6 @@ export default {
     min-width: 20px;
     margin: 0 0 0 5px;
     border: 1px solid black;
-    color: rgb(255, 255, 255);
     cursor: pointer;
     transition: 0.5s all ease;
 }
@@ -336,6 +365,9 @@ export default {
 }
 .edit-box-top {
     height: 91px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 #right-stuff-container {
   width: 50vw;
@@ -349,6 +381,7 @@ export default {
 }
 #detail-title {
   color: black;
+  margin: 0 0 0 10px;
 }
 .subtitle {
   font-size: 25px;
@@ -413,7 +446,7 @@ export default {
   background: #343a40;
 }
 #edit-title {
-    margin: 10px 6px 13px 0;
+    margin: 0 10px 0 10px;
 }
 .detail-text {
   margin-top: 10px;

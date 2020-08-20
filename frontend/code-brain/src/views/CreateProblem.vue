@@ -22,6 +22,13 @@
         @click="toggleAddOtherTag(tag)">
           {{ tag }}
         </div>
+    </div><br />
+    Difficulty
+    <br />
+    <div class="flex">
+      <div class="tag-bubble tag-bubble-easy" :class="{ active: difficulty == 'easy' }" @click="toggleDifficulty('easy')">Easy</div>
+      <div class="tag-bubble tag-bubble-medium" :class="{ active: difficulty == 'medium' }" @click="toggleDifficulty('medium')">Medium</div>
+      <div class="tag-bubble tag-bubble-hard" :class="{ active: difficulty == 'hard' }" @click="toggleDifficulty('hard')">Hard</div>
     </div>
     <label>Notes</label><br />
     <textarea rows="10" cols="80" v-model="notes" /><br />
@@ -58,10 +65,14 @@ export default {
           "Sliding-Window",
           "Hash-Table"
       ],
+      difficulty: null,
       REST_ENDPOINT: "http://localhost:8000"
     };
   },
   methods: {
+    toggleDifficulty(d) {
+      this.difficulty = d;
+    },
     getClass(tag) {
       var c = "";
       c += "tag-bubble-" + tag;
@@ -79,7 +90,9 @@ export default {
       var data = {
         name: this.name,
         link: this.link,
-        mainTag: this.mainTag
+        mainTag: this.mainTag,
+        otherTags: this.otherTags,
+        difficulty: this.difficulty
       };
       if (this.notes.length > 0) {
         data["notes"] = this.notes;
@@ -110,12 +123,6 @@ export default {
 };
 </script>
 <style scoped>
-.flex {
-  display: flex;
-  justify-content: center;
-  max-width: 36vw;
-  margin: 0 auto;
-}
 .active {
   box-shadow:
     0 0 0 4px white,
@@ -131,6 +138,7 @@ export default {
   -moz-user-select: none;
   -khtml-user-select: none;
   -ms-user-select: none;
+  /* transition: 0.5s all ease; */
 }
 .tag-bubble:focus {
   border: none;

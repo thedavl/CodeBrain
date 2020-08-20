@@ -20,7 +20,8 @@
               class="single-card"
               :class="{ active: activeCard == item.name }"
               @click="showDetails(item._id, todo)"
-            >
+            > 
+              <div class="difficulty-bubble" :class="'difficulty-bubble-' + item.difficulty" />
               <div class="single-card-title-and-overflow">
                 <p class="single-card-title">{{ item.name }}</p>
                 <p class="single-card-overflow-indicator" v-if="item.name.length >= 28">...</p>
@@ -155,7 +156,8 @@ export default {
 .single-card-title {
   /* max-width: calc(30em * 0.5); */
   max-width: calc(27em * 0.5);
-  word-break: break-all
+  word-break: break-all;
+  margin-top: 1px;
 } 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
@@ -186,6 +188,7 @@ export default {
   transition: 0.5s all ease;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   cursor: pointer;
 }
 .single-card-title-and-overflow {

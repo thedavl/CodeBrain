@@ -11,7 +11,8 @@ const problemSchema = mongoose.Schema({
     priorityDate: { type: Date, default: Date.now },
     finishedAt: { type: Date, required: false },
     mainTag: { type: String , required: true },
-    otherTags: [{ type: String, required: false, default: [] }]
+    otherTags: [{ type: String, required: false, default: [] }],
+    difficulty: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Problem', problemSchema);
