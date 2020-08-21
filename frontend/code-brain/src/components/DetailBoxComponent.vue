@@ -57,11 +57,13 @@
         </div>
         <div class="detail-box" v-else>
             <div class="edit-box-top">
-                <select class="tag-bubble difficulty-bubble-add" :class="'difficulty-bubble-' + this.newDifficulty" id="difficulty-selector" v-model="newDifficulty">
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
-                </select>
+                <div class="difficulty-bubble-add" :class="'difficulty-bubble-' + this.newDifficulty">
+                    <select class="difficulty-bubble-add-input" v-model="newDifficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
                 <input
                     class="editBox"
                     id="edit-title"
@@ -83,7 +85,7 @@
                 id="white-dark-button"
                 @click="performEdits"
                 >
-                    Finish
+                    Save
                 </button>
                 <button
                     class="btn btn-outline-dark"
@@ -289,13 +291,20 @@ export default {
 </script>
 
 <style scoped>
-#difficulty-selector {
+.difficulty-bubble-add-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    display: inline-block;
     color: white;
 }
 .difficulty-bubble-add:hover {
     background-color: white;
-    border: 1px solid black !important;
-    color: black !important;
+    border: 1px solid black;
+}
+.difficulty-bubble-add:hover .difficulty-bubble-add-input {
+    color: black;
+    border-bottom: 1px solid black;
 }
 #detail-title-flex {
     margin-bottom: 18px;
@@ -304,6 +313,12 @@ export default {
     width: 120px;
     cursor: pointer;
     transition: 0.5s;
+    height: 29px;
+    border-radius: 15px;
+    padding: 0 14px 0 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .tag-bubble-add-flex {
     display: flex;
@@ -314,8 +329,8 @@ export default {
 .tag-bubble-add-input {
     background: transparent;
     border: none;
-    border-bottom: 1px solid black;
     outline: none;
+    border-bottom: 1px solid black;
 }
 .tag-bubble-add {
     min-width: 20px;
@@ -336,7 +351,8 @@ export default {
     transition: 0.2s all ease;
 }
 .tag-bubble-add-confirm:hover {
-    font-size: 25px;
+    font-size: 22px;
+    color: rgb(0, 156, 8);
 }
 .tag-bubble-add:hover span, .tag-bubble-add span:focus {
     max-width: 200px;

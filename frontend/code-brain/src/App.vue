@@ -75,7 +75,6 @@ export default {
   border-radius: 15px;
   padding: 0 14px 0 14px;
   border: none;
-  outline: none;
   display: inline-block;
   color: white;
 }
