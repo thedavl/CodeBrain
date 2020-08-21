@@ -1,7 +1,7 @@
 <template>
     <div id="app">
     <div id="header" class="flex-nav">
-      <a id="logo" @click="toHome">CodeBrain</a>
+      <img id="logo" @click="toHome" src="@/assets/CodeBrain.png" />
       <div v-if="isLogged" id="loggedInMsg">
         <p style="font-size: 20px; margin: 0 30px 0 0;">{{ getName }} <button id="logout" class="btn btn-outline-dark" @click="logout">Logout</button></p>
       </div>
@@ -41,44 +41,50 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 
+.spacer {
+  margin: 0 5px 0 5px;
+}
+
+option {
+  color: black;
+}
+
+.subtitle {
+  font-size: 25px;
+}
 .flex {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   max-width: 36vw;
   margin: 0 auto;
 }
-
 .difficulty-bubble {
   width: 12px;
   height: 12px;
   border-radius: 6px;
 }
-
 .difficulty-bubble-easy {
   background-color: rgb(0, 204, 10);
 }
-
 .difficulty-bubble-medium {
   background-color: rgb(255, 208, 0);
 }
-
 .difficulty-bubble-hard {
   background-color: rgb(255, 47, 10);
 }
-
 .tag-bubble {
   height: 29px;
   line-height: 29px;
   border-radius: 15px;
   padding: 0 14px 0 14px;
   border: none;
-  display: inline-block;
   color: white;
+  display: inline-block;
 }
-
 .tag-bubble-easy {
   background: rgb(0, 204, 10);
 }
@@ -165,15 +171,15 @@ export default {
   background: #a3a3a3; 
 }
 #app {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Lato', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #000000;
 }
 #logo {
-  font-size: 35px;
   margin: 0 0 0 50px;
+  width: 250px;
 }
 #logo:hover {
   cursor: pointer;

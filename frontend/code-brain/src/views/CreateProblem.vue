@@ -8,9 +8,12 @@
     <input type="text" v-model="link" /><br />
     Main Tag
     <br />
-    <select v-model="mainTag">
-      <option v-for="(tag, index) in allTagOptions" :key="index">{{ tag }}</option>
-    </select><br /><br />
+    <div class="tag-bubble tag-bubble-edit" :class="'tag-bubble-' + mainTag">
+      <select class="tag-bubble-edit-input" v-model="mainTag">
+        <option v-for="(tag, index) in allTagOptions" :key="index" :value="tag">{{ tag }}</option>
+      </select>
+    </div>
+    <br />
     Other Tags
     <br />
     <div class="flex">
@@ -33,9 +36,10 @@
     <label>Notes</label><br />
     <textarea rows="10" cols="80" v-model="notes" /><br />
     <label>Solution</label><br />
-    <textarea rows="10" cols="80" v-model="solution" /><br />
-    <button class="btn btn-outline-dark" @click="addNewProblem">Finish</button>
-    <button class="btn btn-outline-dark" @click="cancel">Cancel</button>
+    <textarea rows="10" cols="80" v-model="solution" /><br /><br />
+    <button class="btn btn-outline-dark spacer" @click="addNewProblem">Finish</button>
+    <button class="btn btn-outline-dark spacer" @click="cancel">Cancel</button>
+    <br /><br /><br />
   </div>
 </template>
 <script>
@@ -123,6 +127,34 @@ export default {
 };
 </script>
 <style scoped>
+/* --------------- */
+/* TAG BUBBLE EDIT */
+/* --------------- */
+.tag-bubble-edit {
+  box-shadow: 0 0 6px #8d8d8d;
+  color: black;
+  cursor: pointer;
+  transition: 0.5s all ease;
+  display: inline-block;
+}
+.tag-bubble-edit:hover {
+  background-color: transparent;
+}
+.tag-bubble-edit:hover .tag-bubble-edit-input {
+    border-bottom: 1px solid black;
+    color: black;
+    background-color: transparent;
+}
+.tag-bubble-edit-input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid white;
+    outline: none;
+    max-width: 100px;
+    color: white;
+    cursor: pointer;
+}
+/*  */
 .active {
   box-shadow:
     0 0 0 4px white,
@@ -130,15 +162,13 @@ export default {
   color: white;
 }
 .tag-bubble {
-  display: inline-block;
   cursor: pointer;
   margin: 6px 10px 6px 10px;
-  box-shadow: 0;
   -webkit-user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
   -ms-user-select: none;
-  /* transition: 0.5s all ease; */
+  transition: 0.5s all ease;
 }
 .tag-bubble:focus {
   border: none;

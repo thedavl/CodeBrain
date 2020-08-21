@@ -7,7 +7,7 @@
             </div>
                 <div class="button-flex">
                     <a
-                        class="btn btn-outline-dark"
+                        class="btn btn-outline-dark spacer"
                         id="white-dark-button"
                         :href="selectedItem.link"
                         target="_blank"
@@ -15,7 +15,7 @@
                     >
                     <div v-if="!selectedItem.isComplete">
                         <button
-                        class="btn btn-outline-dark"
+                        class="btn btn-outline-dark spacer"
                         id="white-dark-button"
                         @click="completeProblem"
                         >
@@ -23,14 +23,14 @@
                         </button>
                     </div>
                     <button
-                        class="btn btn-outline-dark"
+                        class="btn btn-outline-dark spacer"
                         id="white-dark-button"
                         @click="startEditing"
                     >
                         Edit
                     </button>
                     <button
-                        class="btn btn-outline-dark"
+                        class="btn btn-outline-dark spacer"
                         id="white-dark-button"
                         @click="bump"
                         v-if="!selectedItem.isComplete"
@@ -97,10 +97,19 @@
             </div>
             <br>
             <div class="button-flex">
-                <div class="tag-bubble tag-bubble-delete spacer" :class="'tag-bubble-' + selectedItem.mainTag" @click="changeMainTag()">{{ selectedItem.mainTag }}</div>
-                <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :class="'tag-bubble-' + tag" class="tag-bubble tag-bubble-delete spacer" @click="queueTagToDelete(tag)">{{ tag }}</div>
+                <div class="tag-bubble tag-bubble-edit spacer" :class="'tag-bubble-' + newMainTag">
+                    <select class="tag-bubble-edit-input" v-model="newMainTag">
+                        <option v-for="(tag, index) in allTagOptions" :key="index" :value="tag">{{ tag }}</option>
+                    </select>
+                </div>
+                <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :class="'tag-bubble-' + tag" class="tag-bubble tag-bubble-delete spacer" @click="queueTagToDelete(tag)">
+                    <div class="tag-bubble-flex">
+                        {{ tag }}
+                        <span>✖</span>
+                    </div>
+                </div>
                 <div class="tag-bubble tag-bubble-add" :id="'tag-bubble-add'">
-                    <div class="tag-bubble-add-flex">
+                    <div class="tag-bubble-flex">
                         <span>
                             <select class="tag-bubble-add-input" v-model="tagToAdd">
                                 <option disabled value="">Select a Tag</option>
@@ -145,6 +154,7 @@ export default {
             newNotes: null,
             newSolution: null,
             newDifficulty: this.selectedItem.difficulty,
+            newMainTag: this.selectedItem.mainTag,
             REST_ENDPOINT: "http://localhost:8000",
             tagsToDelete: [],
             tagsToAdd: [],
@@ -253,7 +263,8 @@ export default {
                 link: this.newLink,
                 notes: this.newNotes,
                 solution: this.newSolution,
-                difficulty: this.newDifficulty
+                difficulty: this.newDifficulty,
+                mainTag: this.newMainTag
             };
             try {
                 await axios({
@@ -283,6 +294,7 @@ export default {
             })
             this.addingNewTag = false;
             this.newDifficulty = this.selectedItem.difficulty;
+            this.newMainTag = this.selectedItem.mainTag;
             this.isEditingDifficulty = false;
             this.isEditing = false;
         }
@@ -291,24 +303,9 @@ export default {
 </script>
 
 <style scoped>
-.difficulty-bubble-add-input {
-    background: transparent;
-    border: none;
-    outline: none;
-    display: inline-block;
-    color: white;
-}
-.difficulty-bubble-add:hover {
-    background-color: white;
-    border: 1px solid black;
-}
-.difficulty-bubble-add:hover .difficulty-bubble-add-input {
-    color: black;
-    border-bottom: 1px solid black;
-}
-#detail-title-flex {
-    margin-bottom: 18px;
-}
+/* ----------------- */
+/* DIFFICULTY BUBBLE */
+/* ----------------- */
 .difficulty-bubble-add {
     width: 120px;
     cursor: pointer;
@@ -320,24 +317,47 @@ export default {
     justify-content: center;
     align-items: center;
 }
-.tag-bubble-add-flex {
-    display: flex;
+.difficulty-bubble-add-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    display: inline-block;
+    color: white;
+}
+.difficulty-bubble-add:hover {
+    background-color: white;
+    box-shadow: 0 0 6px #8d8d8d;
+}
+.difficulty-bubble-add:hover .difficulty-bubble-add-input {
+    color: black;
+    border-bottom: 1px solid black;
+}
+/* -------------- */
+/* TAG BUBBLE ADD */
+/* -------------- */
+.tag-bubble-add {
+    min-width: 20px;
+    border: 1px solid black;
+    cursor: pointer;
+    transition: 0.5s all ease;
+}
+.tag-bubble-add:hover {
+    box-shadow: 0 0 6px #8d8d8d;
+    border: none;
 }
 .tag-bubble-add-confirm {
     color: black;
+    transition: 0.2s all ease;
+}
+.tag-bubble-add-confirm:hover {
+    font-size: 22px;
+    color: rgb(0, 156, 8);
 }
 .tag-bubble-add-input {
     background: transparent;
     border: none;
     outline: none;
     border-bottom: 1px solid black;
-}
-.tag-bubble-add {
-    min-width: 20px;
-    margin: 0 0 0 5px;
-    border: 1px solid black;
-    cursor: pointer;
-    transition: 0.5s all ease;
 }
 .tag-bubble-add span {
     white-space: nowrap;
@@ -346,13 +366,6 @@ export default {
     max-width: 0;
     -webkit-transition: max-width 1s;
     transition: max-width 1s;
-}
-.tag-bubble-add-confirm {
-    transition: 0.2s all ease;
-}
-.tag-bubble-add-confirm:hover {
-    font-size: 22px;
-    color: rgb(0, 156, 8);
 }
 .tag-bubble-add:hover span, .tag-bubble-add span:focus {
     max-width: 200px;
@@ -365,19 +378,60 @@ export default {
     content:'✓';
     margin-left: 5px;
 }
+/* --------------- */
+/* TAG BUBBLE EDIT */
+/* --------------- */
+.tag-bubble-edit {
+    cursor: pointer;
+    transition: 0.5s all ease;
+}
+.tag-bubble-edit:hover {
+    box-shadow: 0 0 6px #8d8d8d;
+    background-color: white;
+    color: black;
+}
+.tag-bubble-edit:hover .tag-bubble-edit-input {
+    border-bottom: 1px solid black;
+    color: black;
+}
+.tag-bubble-edit-input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    max-width: 100px;
+    color: white;
+}
+/* TAG BUBBLE DELETE */
 .tag-bubble-delete {
     cursor: pointer;
     transition: 0.5s all ease;
 }
 .tag-bubble-delete:hover {
     box-shadow: 0 0 6px #8d8d8d;
+    background-color: red;
 }
-.tag-bubble-add:hover{
-    box-shadow: 0 0 6px #8d8d8d;
-    border: none;
+.tag-bubble-delete span {
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    max-width: 0;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
 }
-.spacer {
-    margin: 0 5px 0 5px;
+.tag-bubble-delete:hover span, .tag-bubble-delete span:focus {
+    max-width: 200px;
+    margin-left: 10px;
+}
+/* ----- */
+/* OTHER */
+/* ----- */
+.tag-bubble-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#detail-title-flex {
+    margin-bottom: 18px;
 }
 .edit-box-top {
     height: 91px;
@@ -399,21 +453,12 @@ export default {
   color: black;
   margin: 0 0 0 10px;
 }
-.subtitle {
-  font-size: 25px;
-}
-.btn-spacer {
-  width: 70px;
-}
 .button-flex {
   display: flex;
   justify-content: center;
   margin: 0 auto;
   flex-wrap: wrap;
   width: 80%;
-}
-.button-flex .btn {
-    margin: 0 8px 0 8px;
 }
 .notes {
   width: 43vw;

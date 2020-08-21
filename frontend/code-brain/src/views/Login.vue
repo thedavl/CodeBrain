@@ -54,16 +54,9 @@ export default {
   border: 1px solid rgb(39, 39, 39);
   outline: none;
 }
-
-.flex {
-  display: flex;
-  justify-content: center;
-  margin-top: 5px;
-}
 .signup-login-btn {
   text-decoration: none;
-  margin-top: 7px;
-  margin-left: 15px;
+  margin: 0 -38px 0 15px;
   color: #b5b5b5;
   transition: 0.5s all ease;
 }

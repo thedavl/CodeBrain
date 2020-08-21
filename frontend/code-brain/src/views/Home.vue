@@ -21,10 +21,10 @@
               :class="{ active: activeCard == item.name }"
               @click="showDetails(item._id, todo)"
             > 
-              <div class="difficulty-bubble" :class="'difficulty-bubble-' + item.difficulty" />
               <div class="single-card-title-and-overflow">
+                <div class="difficulty-bubble" :class="'difficulty-bubble-' + item.difficulty" />
                 <p class="single-card-title">{{ item.name }}</p>
-                <p class="single-card-overflow-indicator" v-if="item.name.length >= 28">...</p>
+                <p class="single-card-overflow-indicator" v-if="item.name.length > 28">...</p>
               </div>
               <div class="tag-bubble" :class="'tag-bubble-' + item.mainTag">{{ item.mainTag }}</div>
             </div>
@@ -154,11 +154,16 @@ export default {
 
 <style scoped>
 .single-card-title {
-  /* max-width: calc(30em * 0.5); */
-  max-width: calc(27em * 0.5);
+  max-width: calc(27em * 0.48);
+  height: 45px;
+  overflow: hidden;
   word-break: break-all;
-  margin-top: 1px;
-} 
+  margin: 0;
+  margin-left: 10px;
+}
+.single-card-overflow-indicator {
+  margin: 0;
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
@@ -166,7 +171,7 @@ export default {
   opacity: 0;
 }
 #addProblem {
-  margin-left: 306px;
+  margin-left: 291px;
 }
 .active {
   /* box-shadow: 3px 3px 5px #999; */
@@ -183,18 +188,17 @@ export default {
   line-height: 20px;
   margin-top: 10px;
   padding: 0 10px 0 10px;
-  /* new stuff */
-  overflow: hidden;
   transition: 0.5s all ease;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .single-card-title-and-overflow {
   height: 45px;
   display: flex;
-  justify-content: left;
+  align-items: center;
+  justify-content: start;
 }
 .single-card p {
   line-height: 45px;
