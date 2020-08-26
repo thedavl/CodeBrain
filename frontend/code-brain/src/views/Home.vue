@@ -82,7 +82,7 @@ export default {
       filteredFinished: [],
       selected: null,
       activeCard: null,
-      REST_ENDPOINT: process.env.API_NAME || "http://localhost:8000"
+      REST_ENDPOINT: 'https://code-brain-backend.uc.r.appspot.com' // "http://localhost:8000"
     };
   },
   created() {

@@ -25,9 +25,6 @@ export default {
       password: ""
     };
   },
-  mounted() {
-    console.log("using this endpoint: " + this.REST_ENDPOINT);
-  },
   methods: {
     async login() {
       try {
