@@ -3,17 +3,19 @@
     <div id="main-flex">
       <div id="left-stuff-container">
         <div id="queue">
-          <p class="subtitle">
-            ToDo
+          <div class="scroller-box-flex">
+            <p class="subtitle">
+              ToDo
+            </p>
+            <div class="filters">Filter</div>
             <button
-              id="addProblem"
               class="btn btn-outline-dark"
               @click="addNewProblem"
             >
               +
             </button>
-          </p>
-          <div class="scrollerBox">
+          </div>
+          <div class="scroller-box">
             <div
               v-for="item in todo"
               :key="item.name"
@@ -33,7 +35,7 @@
         </div>
         <div id="finished">
           <p class="subtitle">Recently Finished</p>
-          <div class="scrollerBox">
+          <div class="scroller-box">
             <div
               v-for="item in finished"
               :key="item.name"
@@ -75,7 +77,9 @@ export default {
   data() {
     return {
       todo: [],
+      filteredTodo: [],
       finished: [],
+      filteredFinished: [],
       selected: null,
       activeCard: null,
       REST_ENDPOINT: "http://localhost:8000"
@@ -114,6 +118,7 @@ export default {
           }
         }).then(res => {
           this.todo = res.data.problems;
+          this.filteredTodo = res.data.problems;
         });
         await axios({
           url: `${this.REST_ENDPOINT}/problems/`,
@@ -126,6 +131,7 @@ export default {
           }
         }).then(res => {
           this.finished = res.data.problems;
+          this.filteredFinished = res.data.problems;
         });
       } catch (err) {
         console.log(err);
@@ -153,6 +159,9 @@ export default {
 </script>
 
 <style scoped>
+.subtitle {
+  margin: 0;
+}
 .single-card-title {
   max-width: calc(27em * 0.48);
   height: 45px;
@@ -169,9 +178,6 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
-}
-#addProblem {
-  margin-left: 291px;
 }
 .active {
   /* box-shadow: 3px 3px 5px #999; */
@@ -233,9 +239,16 @@ export default {
   margin: 0 auto;
   margin-top: 85px;
 }
-.scrollerBox {
+.scroller-box {
   height: 100%;
   overflow-y: auto;
+}
+.scroller-box-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  width: 380px;
 }
 #spacer {
   width: 50vw;

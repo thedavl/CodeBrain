@@ -42,7 +42,6 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
-
 .spacer {
   margin: 0 5px 0 5px;
 }
