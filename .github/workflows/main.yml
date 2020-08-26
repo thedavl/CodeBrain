@@ -21,9 +21,3 @@ jobs:
         npm run-script build
       env:
         API_NAME: ${{ secrets.API_NAME }}
-
-    - name: Deploy
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH: master
-        FOLDER: build
