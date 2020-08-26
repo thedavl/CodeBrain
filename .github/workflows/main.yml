@@ -23,7 +23,6 @@ jobs:
         API_NAME: ${{ secrets.API_NAME }}
 
     - name: Deploy
-      uses: thedavl/github-pages-deploy-action@releases/v3
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: master
