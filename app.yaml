@@ -5,3 +5,4 @@ automatic_scaling:
     max_num_instances: 2
 env_variables:
     MONGO_ATLAS_PW: "mmmm55"
+    JWT_KEY: "secret"
