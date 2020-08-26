@@ -159,6 +159,9 @@ export default {
 </script>
 
 <style scoped>
+.filters {
+  
+}
 .subtitle {
   margin: 0;
 }
