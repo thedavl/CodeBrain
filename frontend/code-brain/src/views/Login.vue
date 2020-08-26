@@ -25,9 +25,11 @@ export default {
       password: ""
     };
   },
+  mounted() {
+    console.log("using this endpoint: " + this.REST_ENDPOINT);
+  },
   methods: {
     async login() {
-      console.log(this.REST_ENDPOINT);
       try {
         await loginUser(this.email, this.password);
         this.$router.push("/");
