@@ -70,7 +70,7 @@ export default {
           "Hash-Table"
       ],
       difficulty: null,
-      REST_ENDPOINT: "http://localhost:8000"
+      REST_ENDPOINT: process.env.API_NAME || "http://localhost:8000"
     };
   },
   methods: {

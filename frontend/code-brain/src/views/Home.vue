@@ -82,7 +82,7 @@ export default {
       filteredFinished: [],
       selected: null,
       activeCard: null,
-      REST_ENDPOINT: "http://localhost:8000"
+      REST_ENDPOINT: process.env.API_NAME || "http://localhost:8000"
     };
   },
   created() {

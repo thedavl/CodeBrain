@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     async login() {
+      console.log(this.REST_ENDPOINT);
       try {
         await loginUser(this.email, this.password);
         this.$router.push("/");
