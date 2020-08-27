@@ -155,7 +155,7 @@ export default {
             newSolution: null,
             newDifficulty: this.selectedItem.difficulty,
             newMainTag: this.selectedItem.mainTag,
-            REST_ENDPOINT: "http://localhost:8000",
+            REST_ENDPOINT: 'https://code-brain-backend.uc.r.appspot.com', // "http://localhost:8000"
             tagsToDelete: [],
             tagsToAdd: [],
             tagToAdd: "",
