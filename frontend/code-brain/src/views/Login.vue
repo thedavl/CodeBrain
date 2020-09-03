@@ -10,6 +10,10 @@
     <div class="flex">
       <button class="btn btn-outline-dark" v-on:click="login">Login</button>
       <div class="signup-login-btn" @click="toSignup">Signup</div>
+    </div><br><br>
+    <div>
+      <p>Are you a recruiter, prospective employer, or just want a demo?</p>
+      <button class="btn btn-outline-dark" v-on:click="loginToDemo">Use our demo account</button>
     </div>
   </div>
 </template>
@@ -26,6 +30,15 @@ export default {
     };
   },
   methods: {
+    async loginToDemo() {
+      try {
+        await loginUser("demo@demo.com", "demoPassword");
+        this.$router.push("/");
+        window.location.reload();
+      } catch (err) {
+        alert("Sorry, there was an error");
+      }
+    },
     async login() {
       try {
         await loginUser(this.email, this.password);

@@ -67,7 +67,8 @@ export default {
           "Matrix",
           "Recursion",
           "Sliding-Window",
-          "Hash-Table"
+          "Hash-Table",
+          "Design"
       ],
       difficulty: null,
       REST_ENDPOINT: 'https://code-brain-backend.uc.r.appspot.com' // "http://localhost:8000"

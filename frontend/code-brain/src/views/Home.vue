@@ -7,7 +7,7 @@
             <p class="subtitle">
               ToDo
             </p>
-            <div class="filters">Filter</div>
+            <!-- <div class="filters">Filter</div> -->
             <button
               class="btn btn-outline-dark"
               @click="addNewProblem"
@@ -44,10 +44,11 @@
               @click="showDetails(item._id, finished)"
             >
               <div class="single-card-title-and-overflow">
+                <div class="difficulty-bubble" :class="'difficulty-bubble-' + item.difficulty" />
                 <p class="single-card-title">{{ item.name }}</p>
                 <p class="single-card-overflow-indicator" v-if="item.name.length > 28">...</p>
               </div>
-              <p>{{ getFormattedDate(item.finishedAt) }}</p>
+              <p class="finished-date">{{ getFormattedDate(item.finishedAt) }}</p>
             </div>
           </div>
         </div>
@@ -159,9 +160,10 @@ export default {
 </script>
 
 <style scoped>
-.filters {
-  
+.finished-date {
+  margin: 0;
 }
+
 .subtitle {
   margin: 0;
 }

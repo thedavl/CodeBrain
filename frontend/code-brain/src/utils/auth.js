@@ -1,7 +1,7 @@
 import decode from 'jwt-decode'
 import axios from 'axios'
 
-const REST_ENDPOINT = 'https://code-brain-backend.uc.r.appspot.com' // "http://localhost:8000"
+const REST_ENDPOINT = 'http://localhost:8000'
 const AUTH_TOKEN_KEY = 'authToken'
 
 export function loginUser(email, password) {

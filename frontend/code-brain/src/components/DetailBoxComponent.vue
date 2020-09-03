@@ -44,7 +44,7 @@
                     <div v-for="(tag, index) in selectedItem.otherTags" :key="index" :class="'tag-bubble-' + tag" class="tag-bubble spacer">{{ tag }}</div>
                 </div>
                 <div v-if="selectedItem.isComplete">
-                    <p>Completed on <strong>{{ getFormattedDate(selectedItem.finishedAt) }}</strong></p>
+                    <p class="completed-on-text">Completed on <strong>{{ getFormattedDate(selectedItem.finishedAt) }}</strong></p>
                 </div>
                 <div class="notes">
                     <p class="detail-text" v-if="selectedItem.hasOwnProperty('notes')">{{ selectedItem.notes }}</p>
@@ -172,7 +172,8 @@ export default {
                 "Matrix",
                 "Recursion",
                 "Sliding-Window",
-                "Hash-Table"
+                "Hash-Table",
+                "Design"
             ],
         }
     },
@@ -425,6 +426,9 @@ export default {
 /* ----- */
 /* OTHER */
 /* ----- */
+.completed-on-text {
+    margin: 10px 0 -8px 0;
+}
 .tag-bubble-flex {
     display: flex;
     justify-content: center;
@@ -502,6 +506,7 @@ export default {
 }
 #white-dark-button {
   background: white;
+  margin: 0 5px 0 5px;
 }
 #white-dark-button:hover {
   background: #343a40;

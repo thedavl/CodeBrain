@@ -3,7 +3,7 @@
     <div id="header" class="flex-nav">
       <img id="logo" @click="toHome" src="@/assets/CodeBrain.png" />
       <div v-if="isLogged" id="loggedInMsg">
-        <p style="font-size: 20px; margin: 0 30px 0 0;">{{ getName }} <button id="logout" class="btn btn-outline-dark" @click="logout">Logout</button></p>
+        <p class="welcome-message">{{ getName }} <button id="logout" class="btn btn-outline-dark" @click="logout">Logout</button></p>
       </div>
     </div>
     <router-view />
@@ -42,6 +42,12 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+.welcome-message {
+  font-size: 20px; 
+  margin: 0 30px 0 0;
+}
+
 .spacer {
   margin: 0 5px 0 5px;
 }
@@ -96,6 +102,10 @@ option {
   background: rgb(255, 47, 10);
 }
 
+.tag-bubble-Design {
+  background-color:rgb(143, 219, 0)
+}
+
 .tag-bubble-Array {
   background-color: #00c721;
 }
@@ -145,8 +155,8 @@ option {
 }
 
 #loggedInMsg {
-  width: 300px;
-  margin-left: 10px;
+  min-width: 300px;
+  margin-left: 30px;
 }
 .flex-nav {
   display: flex;
@@ -187,6 +197,7 @@ option {
   margin-top: 30px;
   display: flex;
   justify-content: space-between;
+  
 }
 #nav a.router-link-exact-active {
   color: #42b983;
