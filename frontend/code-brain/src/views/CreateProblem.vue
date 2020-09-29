@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div v-if="isLoading" class="popup-window">
+      <br><br><br><br><br>
+      Loading...
+      <br><br>
+      <img src="@/assets/30.gif" class="loading-img"/>
+    </div>
     <p class="subtitle">Add New Interview Problem</p>
     <br />
     <label>Question Name</label><br />
@@ -71,6 +77,7 @@ export default {
           "Design"
       ],
       difficulty: null,
+      isLoading: false,
       REST_ENDPOINT: 'https://code-brain-backend.uc.r.appspot.com' // "http://localhost:8000"
     };
   },
@@ -106,6 +113,7 @@ export default {
         data["solution"] = this.solution;
       }
       try {
+        this.isLoading = true;
         axios({
           url: `${this.REST_ENDPOINT}/problems`,
           method: "POST",
@@ -115,9 +123,11 @@ export default {
           }
         }).then(res => {
           console.log(res);
+          this.isLoading = false;
           this.$router.push("/");
         });
       } catch (err) {
+        this.isLoading = false;
         console.log(err);
       }
     },

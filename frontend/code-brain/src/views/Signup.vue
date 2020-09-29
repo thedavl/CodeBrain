@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div v-if="isLoading" class="popup-window">
+      <br><br><br><br><br>
+      Loading...
+      <br><br>
+      <img src="@/assets/30.gif" class="loading-img"/>
+    </div>
     <div class="inputs">
       <p id="login-signup">Signup</p>
       <label>Email</label>
@@ -25,7 +31,8 @@ export default {
     return {
       email: "",
       name: "",
-      password: ""
+      password: "",
+      isLoading: false
     };
   },
   methods: {
@@ -33,12 +40,15 @@ export default {
       this.$router.push("/login");
     },
     async signup() {
+      this.isLoading = true;
       try {
         await signupUser(this.email, this.password, this.name);
+        this.isLoading = false;
         this.$router.push("/");
         window.location.reload();
       } catch (err) {
-        alert(`Error: ${err}`);
+        alert("Error: " + err.message);
+        this.isLoading = false;
       }
     }
   }

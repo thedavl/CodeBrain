@@ -1,19 +1,25 @@
 <template>
   <div>
     <div class="inputs">
+      <div v-if="isLoading" class="popup-window">
+        <br><br><br><br><br>
+        Loading...
+        <br><br>
+        <img src="@/assets/30.gif" class="loading-img"/>
+      </div>
       <p id="login-signup">Login</p>
       <label>Email</label>
       <input class="login-input" type="text" v-model="email" /><br />
       <label>Password</label>
-      <input class="login-input" type="password" v-model="password" @keyup.enter="login"/>
+      <input class="login-input" type="password" v-model="password" @keyup.enter="login(email, password)"/>
     </div>
     <div class="flex">
-      <button class="btn btn-outline-dark" v-on:click="login">Login</button>
+      <button class="btn btn-outline-dark" v-on:click="login(email, password)">Login</button>
       <div class="signup-login-btn" @click="toSignup">Signup</div>
     </div><br><br>
     <div>
-      <p>Are you a recruiter, prospective employer, or just want a demo?</p>
-      <button class="btn btn-outline-dark" v-on:click="loginToDemo">Use our demo account</button>
+      <p>Are you a recruiter, employer, or just want a demo?</p>
+      <button class="btn btn-outline-dark" v-on:click="login('demo@demo.com', 'demoPassword')">Use our demo account</button>
     </div>
   </div>
 </template>
@@ -26,26 +32,21 @@ export default {
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      isLoading: false
     };
   },
   methods: {
-    async loginToDemo() {
+    async login(email, password) {
+      this.isLoading = true;
       try {
-        await loginUser("demo@demo.com", "demoPassword");
-        this.$router.push("/");
-        window.location.reload();
-      } catch (err) {
-        alert("Sorry, there was an error");
-      }
-    },
-    async login() {
-      try {
-        await loginUser(this.email, this.password);
+        await loginUser(email, password);
+        this.isLoading = false;
         this.$router.push("/");
         window.location.reload();
       } catch (err) {
         alert("Login Failed");
+        this.isLoading = false;
       }
     },
     toSignup() {

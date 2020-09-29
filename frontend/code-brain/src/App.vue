@@ -43,6 +43,22 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 
+.loading-img {
+  width: 120px;
+}
+.popup-window {
+  border: 1px solid black;
+  border-radius: 10px;
+  height: 300px;
+  width: 500px;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  background: white;
+}
+
 .welcome-message {
   font-size: 20px; 
   margin: 0 30px 0 0;
