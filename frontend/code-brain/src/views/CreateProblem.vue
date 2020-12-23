@@ -78,7 +78,7 @@ export default {
       ],
       difficulty: null,
       isLoading: false,
-      REST_ENDPOINT: 'https://code-brain-backend-291804.appspot.com' // "http://localhost:8000"
+      REST_ENDPOINT: 'https://code-brain-backend-291804.wl.r.appspot.com' // "http://localhost:8000"
     };
   },
   methods: {

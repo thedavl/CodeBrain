@@ -83,7 +83,7 @@ export default {
       filteredFinished: [],
       selected: null,
       activeCard: null,
-      REST_ENDPOINT: 'https://code-brain-backend-291804.appspot.com' // "http://localhost:8000"
+      REST_ENDPOINT: 'https://code-brain-backend-291804.wl.r.appspot.com' // "http://localhost:8000"
     };
   },
   created() {
