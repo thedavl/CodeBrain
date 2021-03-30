@@ -51,6 +51,8 @@
 <script>
 import axios from "axios";
 
+import { getEndpoint } from "@/utils/auth.js"
+
 export default {
   name: "CreateProblem",
   data() {
@@ -77,8 +79,7 @@ export default {
           "Design"
       ],
       difficulty: null,
-      isLoading: false,
-      REST_ENDPOINT: 'https://codebrain.herokuapp.com' // "http://localhost:8000"
+      isLoading: false
     };
   },
   methods: {
@@ -112,10 +113,11 @@ export default {
       if (this.solution.length > 0) {
         data["solution"] = this.solution;
       }
+      var endpoint = getEndpoint();
       try {
         this.isLoading = true;
         axios({
-          url: `${this.REST_ENDPOINT}/problems`,
+          url: `${endpoint}/problems`,
           method: "POST",
           data: data,
           headers: {

@@ -2,7 +2,14 @@ import decode from 'jwt-decode'
 import axios from 'axios'
 
 const REST_ENDPOINT = 'https://codebrain.herokuapp.com'
+// const REST_ENDPOINT = 'http://localhost:8000'
 const AUTH_TOKEN_KEY = 'authToken'
+
+export function getEndpoint() {
+    return new Promise(async (resolve, reject) => {
+        resolve(REST_ENDPOINT);
+    })
+}
 
 export function loginUser(email, password) {
     return new Promise(async (resolve, reject) => {

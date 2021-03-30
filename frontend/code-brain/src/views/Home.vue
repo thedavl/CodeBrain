@@ -69,6 +69,7 @@
 import axios from "axios";
 
 import DetailBoxComponent from "@/components/DetailBoxComponent.vue"
+import { getEndpoint } from "@/utils/auth.js"
 
 export default {
   name: "Home",
@@ -82,8 +83,7 @@ export default {
       finished: [],
       filteredFinished: [],
       selected: null,
-      activeCard: null,
-      REST_ENDPOINT: 'https://codebrain.herokuapp.com' // "http://localhost:8000"
+      activeCard: null
     };
   },
   created() {
@@ -107,9 +107,10 @@ export default {
         return date.getMonth() + 1 + "/" + date.getDay() + " " + date.getHours() + ":" + minutes;
     },
     async getUserProblems() {
+      var endpoint = getEndpoint();
       try {
         await axios({
-          url: `${this.REST_ENDPOINT}/problems/`,
+          url: `${endpoint}/problems/`,
           method: "GET",
           params: {
             isComplete: false
@@ -122,7 +123,7 @@ export default {
           this.filteredTodo = res.data.problems;
         });
         await axios({
-          url: `${this.REST_ENDPOINT}/problems/`,
+          url: `${endpoint}/problems/`,
           method: "GET",
           params: {
             isComplete: true

@@ -9,6 +9,7 @@ const userRoutes = require('./api/routes/users')
 
 mongoose.connect(
     'mongodb+srv://BigCodeBrainAdmin:' + 
+    // "mmmm55" +
     process.env.MONGO_ATLAS_PW + 
     '@cluster0.x1ban.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
     {
