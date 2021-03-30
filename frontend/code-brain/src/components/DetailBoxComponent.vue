@@ -144,6 +144,8 @@
 <script>
 import axios from "axios";
 
+import { getEndpoint } from "@/utils/auth.js"
+
 export default {
     name: "DetailBoxComponent",
     data() {
@@ -155,7 +157,6 @@ export default {
             newSolution: null,
             newDifficulty: this.selectedItem.difficulty,
             newMainTag: this.selectedItem.mainTag,
-            REST_ENDPOINT: 'https://code-brain-backend-291804.wl.r.appspot.com', // "http://localhost:8000"
             tagsToDelete: [],
             tagsToAdd: [],
             tagToAdd: "",
@@ -175,13 +176,15 @@ export default {
                 "Hash-Table",
                 "Design"
             ],
+            REST_ENDPOINT: ""
         }
     },
     props: {
         selectedItem: Object
     },
-    mounted() {
+    async mounted() {
         console.log(this.selectedItem.solution);
+        this.REST_ENDPOINT = await getEndpoint();
     },
     methods: {
         formatDifficulty(d) {
