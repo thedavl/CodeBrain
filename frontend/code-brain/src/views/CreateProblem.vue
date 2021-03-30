@@ -99,7 +99,7 @@ export default {
         this.otherTags.push(tag);
       }
     },
-    addNewProblem() {
+    async addNewProblem() {
       var data = {
         name: this.name,
         link: this.link,
@@ -113,7 +113,7 @@ export default {
       if (this.solution.length > 0) {
         data["solution"] = this.solution;
       }
-      var endpoint = getEndpoint();
+      var endpoint = await getEndpoint();
       try {
         this.isLoading = true;
         axios({

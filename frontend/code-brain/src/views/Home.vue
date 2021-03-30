@@ -107,7 +107,7 @@ export default {
         return date.getMonth() + 1 + "/" + date.getDay() + " " + date.getHours() + ":" + minutes;
     },
     async getUserProblems() {
-      var endpoint = getEndpoint();
+      var endpoint = await getEndpoint();
       try {
         await axios({
           url: `${endpoint}/problems/`,

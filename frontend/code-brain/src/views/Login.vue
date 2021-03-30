@@ -19,7 +19,7 @@
     </div><br><br>
     <div>
       <p>Are you a recruiter, employer, or just want a demo?</p>
-      <button class="btn btn-outline-dark" v-on:click="login('demo@demo.com', 'demoPassword')">Use our demo account</button>
+      <button class="btn btn-outline-dark" v-on:click="login('demoaccount@demo.com', 'demo1')">Use our demo account</button>
     </div>
   </div>
 </template>
