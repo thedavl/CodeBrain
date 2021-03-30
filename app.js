@@ -10,12 +10,14 @@ const userRoutes = require('./api/routes/users')
 mongoose.connect(
     'mongodb+srv://BigCodeBrainAdmin:' + 
     process.env.MONGO_ATLAS_PW + 
-    '@cluster0.x1ban.mongodb.net/Cluster0?retryWrites=true&w=majority',
+    '@cluster0.x1ban.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
     }
-);
+)
+.then(() => console.log('MongoDB connected...'))
+.catch(err => console.log(err));
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
